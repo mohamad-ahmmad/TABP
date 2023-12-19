@@ -1,6 +1,6 @@
 using API.Middlewares;
 using Application;
-using Application.Abstractions.Data;
+using Application.Abstractions;
 using Application.Behaviors.Validation;
 using Application.Users.Commands.Create;
 using Domain.Repositories;
@@ -8,6 +8,7 @@ using FluentValidation;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories.Users;
 using Infrastructure.Persistence.UnitOfWork;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -27,6 +28,7 @@ builder.Host.UseSerilog((context, config) =>
 builder.Services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
 builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+builder.Services.AddScoped<IHasher, Sha256Hasher>();
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
@@ -34,7 +36,8 @@ builder.Services.AddMediatR(config =>
 });
 builder.Services.AddDbContext<TABPDbContext>(config =>
 {
-    config.UseSqlServer(builder.Configuration["ConnectionStrings:SqlServer"]);
+    config.UseSqlServer(builder.Configuration["ConnectionStrings:SqlServer"])
+    .EnableSensitiveDataLogging();
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 
 namespace API.Middlewares;
 public class ExceptionHandlerMiddleware
@@ -20,7 +21,14 @@ public class ExceptionHandlerMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Message: {ex.Message}, Request-Info: {JsonSerializer.Serialize(context.Request)}");
+            var requestStr = JsonSerializer.Serialize(new
+            {
+                context.Request.Protocol,
+                context.Request.ContentType,
+                context.Request.Method,
+                Path = context.Request.Path.ToString(),
+            });
+            _logger.LogError(ex, $"Message: {ex.Message}, Request-Info: {requestStr}");
             context.Response.StatusCode = 500;
             await context.Response.WriteAsJsonAsync(new
             {
