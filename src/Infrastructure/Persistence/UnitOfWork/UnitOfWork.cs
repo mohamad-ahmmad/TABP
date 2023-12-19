@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Data;
+﻿using Application.Abstractions;
 
 namespace Infrastructure.Persistence.UnitOfWork
 {

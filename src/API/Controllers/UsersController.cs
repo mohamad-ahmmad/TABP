@@ -27,10 +27,10 @@ public class UsersController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UserDto>> AddUser(UserForCreateDTO user)
+    public async Task<ActionResult<UserDto>> AddUser(UserForCreateDTO user, CancellationToken cancellationToken)
     {
         var createUserCommand = new CreateUserCommand(user);
-        var result = await _mediator.Send(createUserCommand);
+        var result = await _mediator.Send(createUserCommand, cancellationToken);
 
         if (result.IsFailure)
         {

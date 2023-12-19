@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Data;
+﻿using Application.Abstractions;
 using Application.Users.DTOs;
 using AutoMapper;
 using Domain.Entities;
@@ -15,30 +15,37 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
     private readonly IUsersRepository _userRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IHasher _passwordHasher;
 
     public CreateUserCommandHandler(IUnitOfWork unitOfWork,
                                     IUsersRepository usersRepository,
-                                    IMapper mapper)
+                                    IMapper mapper,
+                                    IHasher passwordHasher)
     {
         _userRepo = usersRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _passwordHasher = passwordHasher;
     }
     public async Task<Result<UserDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
+        var errors = new List<Error>();
         if (await _userRepo.IsUsernameExistByAsync(request.UserForCreateDto.Username, cancellationToken))
         {
-            return UserErrors.UsernameAlreadyUsed;
+            errors.Add(UserErrors.UsernameAlreadyUsed);
         }
         if(await _userRepo.IsEmailExistByAsync(request.UserForCreateDto.Email, cancellationToken))
         {
-            return UserErrors.EmailAlreadyUsed;
+            errors.Add(UserErrors.EmailAlreadyUsed);
         }
-        if (request.UserForCreateDto.UserLevel == UserLevels.Admin)
+        if(errors.Any())
         {
-            return UserErrors.UnAuthorized;
+            return errors;
         }
+
         var user = _mapper.Map<User>(request.UserForCreateDto);
+
+        user.Password = _passwordHasher.Hash(user.Password);
 
         await _userRepo.AddUserAsync(user, cancellationToken);
 

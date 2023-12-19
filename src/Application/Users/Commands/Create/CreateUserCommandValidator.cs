@@ -15,7 +15,7 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
             .MaximumLength(30)
             .MinimumLength(5);
         RuleFor(e => e.UserForCreateDto.Password)
-            .Matches("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$")
+            .MinimumLength(10)
             //TODO: return more information.
             .WithMessage("Weak password");
         RuleFor(e => e.UserForCreateDto.Firstname)
