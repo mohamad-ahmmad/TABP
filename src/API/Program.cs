@@ -3,6 +3,7 @@ using Application;
 using Application.Abstractions;
 using Application.Behaviors.Validation;
 using Application.Users.Commands.Create;
+using Domain.Entities;
 using Domain.Repositories;
 using FluentValidation;
 using Infrastructure.Persistence;
@@ -29,6 +30,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReferenc
 builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 builder.Services.AddScoped<IHasher, Sha256Hasher>();
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly);

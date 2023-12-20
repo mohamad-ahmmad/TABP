@@ -1,9 +1,9 @@
-﻿using Domain.Common;
+﻿using Domain.Entities;
 
 namespace Application.Abstractions;
 
-public interface IJwtProvider<T> where T : BaseEntity
+public interface IJwtProvider
 {
-    string GenerateToken(T obj);
+    string GenerateToken(User obj);
 }
 
