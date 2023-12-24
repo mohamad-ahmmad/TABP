@@ -3,6 +3,7 @@ using Domain.Errors;
 using Domain.Repositories;
 using Domain.Shared;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Users.Queries.Login;
 
@@ -11,17 +12,20 @@ public class LoginUseryQueryHandler : IRequestHandler<LoginUserQuery, Result<str
     private readonly IUsersRepository _usersRepository;
     private readonly IJwtProvider _jwtProvider;
     private readonly IHasher _hasher;
+    private readonly ILogger<LoginUseryQueryHandler> _logger;
 
     public LoginUseryQueryHandler
         (
             IJwtProvider jwtProvider,
             IUsersRepository usersRepository,
-            IHasher hasher 
+            IHasher hasher,
+            ILogger<LoginUseryQueryHandler> logger
         )
     {
         _usersRepository = usersRepository;
         _jwtProvider = jwtProvider;
         _hasher = hasher;
+        _logger = logger;
     }
     public async Task<Result<string>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
@@ -31,10 +35,12 @@ public class LoginUseryQueryHandler : IRequestHandler<LoginUserQuery, Result<str
                                                             cancellationToken);
         if (user == null)
         {
+            _logger.LogInformation($"Invalid credentials.");
             return UserErrors.InvalidCredentials;
         }
 
         var token = _jwtProvider.GenerateToken(user);
+        _logger.LogInformation($"User with {credentials.Username} username has generated '{token}' JWT Token.");
         return token;
     }
 }
