@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/// <summary>
+/// Users endpoints.
+/// </summary>
 [ApiController]
 [Route("/api/users")]
 public class UsersController : Controller
@@ -21,9 +24,10 @@ public class UsersController : Controller
     /// Add a user.
     /// </summary>
     /// <param name="user">User data to save.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>ActionResult</returns>
-    /// <response code=200>Return the added user data.</response>
-    /// <response code=400>Return an error that the client did.</response>
+    /// <response code="200">Return the added user data.</response>
+    /// <response code="400">List of errors.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

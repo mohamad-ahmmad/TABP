@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>API</name>
+    </assembly>
+    <members>
+        <member name="T:API.Controllers.AuthenticationController">
+            <summary>
+            Controller for authenticating users.
+            </summary>
+        </member>
+        <member name="M:API.Controllers.AuthenticationController.AuthUserByCredentials(Application.Users.DTOs.LoginCredentialsDto,System.Threading.CancellationToken)">
+            <summary>
+            Authenticating user by credentials.
+            </summary>
+            <param name="loginCredentialsDto"></param>
+            <param name="cancellationToken"></param>
+            <response code="200">Token generated.</response>
+            <response code="400">List of errors.</response>
+            <returns>Token</returns>
+        </member>
+        <member name="T:API.Controllers.UsersController">
+            <summary>
+            Users endpoints.
+            </summary>
+        </member>
+        <member name="M:API.Controllers.UsersController.AddUser(Application.Users.DTOs.UserForCreateDTO,System.Threading.CancellationToken)">
+            <summary>
+            Add a user.
+            </summary>
+            <param name="user">User data to save.</param>
+            <param name="cancellationToken"></param>
+            <returns>ActionResult</returns>
+            <response code="200">Return the added user data.</response>
+            <response code="400">List of errors.</response>
+        </member>
+    </members>
+</doc>
