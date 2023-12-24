@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-    [ApiController]
+[ApiController]
 [Route("/api/users")]
 public class UsersController : Controller
 {
@@ -31,7 +31,7 @@ public class UsersController : Controller
     {
         var createUserCommand = new CreateUserCommand(user);
         var result = await _mediator.Send(createUserCommand, cancellationToken);
-
+        
         if (result.IsFailure)
         {
             return BadRequest(new

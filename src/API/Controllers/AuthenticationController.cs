@@ -15,8 +15,16 @@ namespace API.Controllers
         {
             _mediator = mediator;
         }
-
+        /// <summary>
+        /// Authenticate a user by username & password.
+        /// </summary>
+        /// <param name="loginCredentialsDto"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        
         public async Task<ActionResult<string>> AuthUserByCredentials(LoginCredentialsDto loginCredentialsDto, CancellationToken cancellationToken)
         {
             var loginQuery = new LoginUserQuery(loginCredentialsDto);
@@ -28,7 +36,7 @@ namespace API.Controllers
                     result.Errors
                 });
             }
-
+            
             return Ok(result.Response);
         }
     }

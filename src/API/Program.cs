@@ -2,8 +2,6 @@ using API.Middlewares;
 using Application;
 using Application.Abstractions;
 using Application.Behaviors.Validation;
-using Application.Users.Commands.Create;
-using Domain.Entities;
 using Domain.Repositories;
 using FluentValidation;
 using Infrastructure.Persistence;
@@ -26,7 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Host.UseSerilog((context, config) =>
 {
-    config.ReadFrom.Configuration(context.Configuration);   
+    config.ReadFrom.Configuration(context.Configuration);
 });
 builder.Services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
 builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly);
@@ -57,12 +55,15 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
-    
+
 });
 builder.Services.AddDbContext<TABPDbContext>(config =>
 {
     config.UseSqlServer(builder.Configuration["ConnectionStrings:SqlServer"])
-    .EnableSensitiveDataLogging();
+                .LogTo(Console.WriteLine,
+                    new[] { DbLoggerCategory.Database.Command.Name },
+                    LogLevel.Information)
+            .EnableSensitiveDataLogging();
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();

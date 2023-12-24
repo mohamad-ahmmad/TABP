@@ -10,21 +10,24 @@ public class LoginUseryQueryHandler : IRequestHandler<LoginUserQuery, Result<str
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IJwtProvider _jwtProvider;
+    private readonly IHasher _hasher;
 
     public LoginUseryQueryHandler
         (
             IJwtProvider jwtProvider,
-            IUsersRepository usersRepository
+            IUsersRepository usersRepository,
+            IHasher hasher 
         )
     {
         _usersRepository = usersRepository;
         _jwtProvider = jwtProvider;
+        _hasher = hasher;
     }
     public async Task<Result<string>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
         var credentials = request.CredentialsDto;
         var user = await _usersRepository.GetUserByCredentials(credentials.Username,
-                                                            credentials.Password,
+                                                           _hasher.Hash(credentials.Password),
                                                             cancellationToken);
         if (user == null)
         {
