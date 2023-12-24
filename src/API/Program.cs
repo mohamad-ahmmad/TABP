@@ -12,7 +12,9 @@ using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +32,28 @@ builder.Services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReferenc
 builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 builder.Services.AddScoped<IHasher, Sha256Hasher>();
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+    {
+        var jwtOptions = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>()!;
+        var key = Encoding.UTF8.GetBytes(jwtOptions.Key!);
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
