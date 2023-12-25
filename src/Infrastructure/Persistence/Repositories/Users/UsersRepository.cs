@@ -26,5 +26,12 @@ public class UsersRepository : IUsersRepository
     {
         return await _dbContext.Users.Where(u => u.Email == email).AnyAsync(cancellationToken);
     }
+
+    public async Task<User?> GetUserByCredentials(string username, string password, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users
+            .Where(u => u.Username == username &&  u.Password == password)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }
 

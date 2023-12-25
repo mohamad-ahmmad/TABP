@@ -5,11 +5,13 @@ VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{38B95A0A-86BE-44FF-BC70-8F19635D7F0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{94F4BA83-6009-4564-AB91-A09213B10C94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{94F4BA83-6009-4564-AB91-A09213B10C94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{52427C75-E998-433A-8D06-5C15986E9CD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{52427C75-E998-433A-8D06-5C15986E9CD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{57ED51AA-60E6-449D-8777-5F3D60E19A91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{57ED51AA-60E6-449D-8777-5F3D60E19A91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Tests", "Application.Tests\Application.Tests.csproj", "{897223B5-2D7C-430C-A69A-C17553248945}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{57ED51AA-60E6-449D-8777-5F3D60E19A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57ED51AA-60E6-449D-8777-5F3D60E19A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57ED51AA-60E6-449D-8777-5F3D60E19A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{897223B5-2D7C-430C-A69A-C17553248945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{897223B5-2D7C-430C-A69A-C17553248945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{897223B5-2D7C-430C-A69A-C17553248945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{897223B5-2D7C-430C-A69A-C17553248945}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
