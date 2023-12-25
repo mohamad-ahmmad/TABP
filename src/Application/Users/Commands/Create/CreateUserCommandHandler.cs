@@ -47,6 +47,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
         user.Password = _passwordHasher.Hash(user.Password);
 
+        //Todo: Allow for admins to put the user level admin/user.
+
         await _userRepo.AddUserAsync(user, cancellationToken);
 
         await _unitOfWork.CommitAsync(cancellationToken);
