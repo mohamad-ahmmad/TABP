@@ -9,6 +9,7 @@ using Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace Application.Cities.Commands.Create;
 
@@ -41,7 +42,7 @@ public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, Resul
     {
         if (_userContext.GetUserLevel() != UserLevels.Admin)
         {
-            return CityErrors.UnauthorizedToCreateCity;
+            return Result<CityForAdminDto>.Failure(CityErrors.UnauthorizedToCreateCity, HttpStatusCode.Unauthorized);
         }
 
         var urls = await _imageUploader.UploadImageAsync(new List<IFormFile>

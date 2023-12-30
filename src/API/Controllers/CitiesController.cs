@@ -33,7 +33,7 @@ public class CitiesController : Controller
         
         if (result.IsFailure)
         {
-            return BadRequest(result.Errors);
+            return StatusCode((int)result.StatusCode,new { result.Errors });
             
         }
 
