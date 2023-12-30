@@ -5,10 +5,14 @@ using Application.Behaviors.Validation;
 using Domain.Repositories;
 using FluentValidation;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Repositories.Cities;
 using Infrastructure.Persistence.Repositories.Users;
 using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Security;
+using Infrastructure.Services.ImagesUploaders;
+using Infrastructure.Services.Uploaders;
 using MediatR;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -47,6 +51,11 @@ builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 builder.Services.AddScoped<IHasher, Sha256Hasher>();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+builder.Services.AddSingleton<IImageExtensionValidator, ImageExtensionValidator>();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 12000000; 
+});
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
     {
@@ -67,7 +76,7 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
@@ -83,6 +92,15 @@ builder.Services.AddDbContext<TABPDbContext>(config =>
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IImageUploaderService>(provider =>
+{
+    var uploader = new InServerImageUploaderService();
+    uploader.SetWebRootPath(builder.Environment.WebRootPath);
+
+    return uploader;
+});
+builder.Services.AddScoped<IUserContext, UserContext>();
+builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 
 var app = builder.Build();
 
@@ -98,6 +116,10 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

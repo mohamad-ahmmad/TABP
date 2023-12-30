@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TABPDbContext))]
-    partial class TABPDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231230153646_cities_table")]
+    partial class citiestable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,32 +61,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("5beac0db-93ba-4ebe-86e2-f29f577995a2"),
-                            CityName = "Japan",
-                            CountryName = "Tokyo",
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            IsDeleted = false,
-                            LastModified = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            LastModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ThumbnailUrl = "1.jpg"
-                        },
-                        new
-                        {
-                            Id = new Guid("d55a1cac-c04b-41cf-8924-b9a4d0d95cd0"),
-                            CityName = "Moscow",
-                            CountryName = "Russia",
-                            Created = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            IsDeleted = false,
-                            LastModified = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            LastModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ThumbnailUrl = "2.jpg"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
