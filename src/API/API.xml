@@ -19,6 +19,18 @@
             <response code="400">List of errors.</response>
             <returns>Token</returns>
         </member>
+        <member name="M:API.Controllers.CitiesController.CreateCity(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
+            <summary>
+            Create a city.
+            </summary>
+            <param name="cityJson"></param>
+            <param name="image"></param>
+            <param name="cancellationToken"></param>
+            <returns>City</returns>
+            <response code="401">Unauthorized to create a city.</response>
+            <response code="409">List of errors.</response>
+            <response code="200">The created city.</response>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

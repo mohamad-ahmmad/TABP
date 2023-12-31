@@ -40,7 +40,7 @@ public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, Resul
     }
     public async Task<Result<CityForAdminDto>> Handle(CreateCityCommand request, CancellationToken cancellationToken)
     {
-        if (await _cityRepo.ExistsBasedOnCityName(request.CityDto.CityName,
+        if (await _cityRepo.DoesCityExists(request.CityDto.CityName,
                                                 request.CityDto.CountryName,
                                                 cancellationToken))
         {

@@ -24,7 +24,7 @@ public class CitiesRepository : ICitiesRepository
     {
         cityName = cityName.ToLower();
         countryName = countryName.ToLower();
-        return await _dbContext.Cities.Where(c => c.CityName.Equals(cityName) || c.CountryName.Equals(countryName)).AnyAsync();
+        return await _dbContext.Cities.Where(c => c.CityName.Equals(cityName) || c.CountryName.Equals(countryName)).AnyAsync(cancellationToken);
     }
 }
 
