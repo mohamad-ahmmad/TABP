@@ -5,11 +5,13 @@ using Application.Behaviors.Validation;
 using Domain.Repositories;
 using FluentValidation;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Repositories.Cities;
 using Infrastructure.Persistence.Repositories.Users;
 using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Security;
 using Infrastructure.Services.ImagesUploaders;
+using Infrastructure.Services.TimeProviders;
 using Infrastructure.Services.Uploaders;
 using MediatR;
 using Microsoft.AspNetCore.Http.Features;
@@ -52,9 +54,10 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipeli
 builder.Services.AddScoped<IHasher, Sha256Hasher>();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 builder.Services.AddSingleton<IImageExtensionValidator, ImageExtensionValidator>();
+builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.Configure<FormOptions>(options =>
 {
-    options.MultipartBodyLengthLimit = 12000000; 
+    options.MultipartBodyLengthLimit = 12000000; //12MB
 });
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
@@ -82,14 +85,16 @@ builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
 
 });
-builder.Services.AddDbContext<TABPDbContext>(config =>
+builder.Services.AddDbContext<TABPDbContext>((sp, config) =>
 {
     config.UseSqlServer(builder.Configuration["ConnectionStrings:SqlServer"])
                 .LogTo(Console.WriteLine,
                     new[] { DbLoggerCategory.Database.Command.Name },
                     LogLevel.Information)
-            .EnableSensitiveDataLogging();
+            .EnableSensitiveDataLogging()
+            .AddInterceptors(sp.GetRequiredService<AuditableEntityInterceptor>());
 });
+builder.Services.AddScoped<AuditableEntityInterceptor>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IImageUploaderService>(provider =>
