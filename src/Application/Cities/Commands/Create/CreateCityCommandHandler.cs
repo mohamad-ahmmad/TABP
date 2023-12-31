@@ -40,6 +40,13 @@ public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, Resul
     }
     public async Task<Result<CityForAdminDto>> Handle(CreateCityCommand request, CancellationToken cancellationToken)
     {
+        if (await _cityRepo.ExistsBasedOnCityName(request.CityDto.CityName,
+                                                request.CityDto.CountryName,
+                                                cancellationToken))
+        {
+            return Result<CityForAdminDto>.Failure(CityErrors.CityAlreadyExist, HttpStatusCode.Conflict);
+        }
+
         if (_userContext.GetUserLevel() != UserLevels.Admin)
         {
             return Result<CityForAdminDto>.Failure(CityErrors.UnauthorizedToCreateCity, HttpStatusCode.Unauthorized);
@@ -59,6 +66,7 @@ public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, Resul
         await _cityRepo.AddCityAsync(city, cancellationToken);
 
         await _unitOfWork.CommitAsync(cancellationToken);
+        _logger.LogInformation($"City with '{city.Id}' ID has successfully added.");
 
         return _mapper.Map<CityForAdminDto>(city);
     }
