@@ -1,5 +1,8 @@
 ﻿using Application.Abstractions;
+using Application.Users.Queries.Login;
 using Domain.Common;
+using Infrastructure.Persistence.Repositories.Users;
+using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -46,7 +49,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
                 entry.Entity.LastModified = _dateProvider.GetUtcNow();
             }
         }
-
+        
     }
     public static bool HasChangedOwnedEntities(EntityEntry entry) =>
       entry.References.Any(r =>

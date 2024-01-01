@@ -8,7 +8,7 @@ public class CityProfile : Profile
 {
     public CityProfile()
     {
-        CreateMap<City, CityForAdminDto>();
+        CreateMap<City, CityDto>();
     }
 }
 

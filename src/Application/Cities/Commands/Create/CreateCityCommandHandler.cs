@@ -14,7 +14,7 @@ using System.Net;
 
 namespace Application.Cities.Commands.Create;
 
-public class CreateCityCommandHandler : ICommandHandler<CreateCityCommand, CityForAdminDto>
+public class CreateCityCommandHandler : ICommandHandler<CreateCityCommand, CityDto>
 {
     private readonly ILogger<CreateCityCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
@@ -39,18 +39,18 @@ public class CreateCityCommandHandler : ICommandHandler<CreateCityCommand, CityF
         _userContext = userContext;
         _mapper = mapper;
     }
-    public async Task<Result<CityForAdminDto>> Handle(CreateCityCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CityDto>> Handle(CreateCityCommand request, CancellationToken cancellationToken)
     {
-        if (await _cityRepo.DoesCityExists(request.CityDto.CityName,
+        if (await _cityRepo.DoesCityExistsAsync(request.CityDto.CityName,
                                                 request.CityDto.CountryName,
                                                 cancellationToken))
         {
-            return Result<CityForAdminDto>.Failure(CityErrors.CityAlreadyExist, HttpStatusCode.Conflict);
+            return Result<CityDto>.Failure(CityErrors.CityAlreadyExist, HttpStatusCode.Conflict);
         }
 
         if (_userContext.GetUserLevel() != UserLevels.Admin)
         {
-            return Result<CityForAdminDto>.Failure(CityErrors.UnauthorizedToCreateCity, HttpStatusCode.Unauthorized);
+            return Result<CityDto>.Failure(CityErrors.UnauthorizedToCreateCity, HttpStatusCode.Unauthorized);
         }
 
         var urls = await _imageUploader.UploadImageAsync(new List<IFormFile>
@@ -69,7 +69,10 @@ public class CreateCityCommandHandler : ICommandHandler<CreateCityCommand, CityF
         await _unitOfWork.CommitAsync(cancellationToken);
         _logger.LogInformation($"City with '{city.Id}' ID has successfully added.");
 
-        return _mapper.Map<CityForAdminDto>(city);
+        var cityDto = _mapper.Map<CityDto>(city);
+        cityDto.IsAdmin = true;
+
+        return cityDto;
     }
 
     public City MapCityDtoToCity(CityForCreateDto cityForCreateDto, string imageUrl)

@@ -20,11 +20,16 @@ public class CitiesRepository : ICitiesRepository
         return city;
     }
     
-    public async Task<bool> DoesCityExists(string cityName, string countryName, CancellationToken cancellationToken)
+    public async Task<bool> DoesCityExistsAsync(string cityName, string countryName, CancellationToken cancellationToken)
     {
         cityName = cityName.ToLower();
         countryName = countryName.ToLower();
         return await _dbContext.Cities.Where(c => c.CityName.Equals(cityName) || c.CountryName.Equals(countryName)).AnyAsync(cancellationToken);
+    }
+
+    public async Task<City?> GetCityByIdAsync(Guid Id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Cities.Where(c=> c.Id == Id).FirstOrDefaultAsync();
     }
 }
 

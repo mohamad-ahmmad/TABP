@@ -1,4 +1,5 @@
-﻿using Application.Users.DTOs;
+﻿using Application.Abstractions.Messaging;
+using Application.Users.DTOs;
 using Domain.Shared;
 using MediatR;
 
