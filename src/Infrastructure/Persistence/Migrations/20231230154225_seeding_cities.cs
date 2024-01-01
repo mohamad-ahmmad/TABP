@@ -18,8 +18,8 @@ namespace Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "CityName", "CountryName", "Created", "CreatedBy", "IsDeleted", "LastModified", "LastModifiedBy", "ThumbnailUrl" },
                 values: new object[,]
                 {
-                    { new Guid("5beac0db-93ba-4ebe-86e2-f29f577995a2"), "Japan", "Tokyo", new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), false, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "1.jpg" },
-                    { new Guid("d55a1cac-c04b-41cf-8924-b9a4d0d95cd0"), "Moscow", "Russia", new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), false, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "2.jpg" }
+                    { new Guid("5beac0db-93ba-4ebe-86e2-f29f577995a2"), "Japan", "Tokyo", DateTime.UtcNow, new Guid("00000000-0000-0000-0000-000000000000"), false, DateTime.UtcNow, new Guid("00000000-0000-0000-0000-000000000000"), "1.jpg" },
+                    { new Guid("d55a1cac-c04b-41cf-8924-b9a4d0d95cd0"), "Moscow", "Russia", DateTime.UtcNow, new Guid("00000000-0000-0000-0000-000000000000"), false, DateTime.UtcNow, new Guid("00000000-0000-0000-0000-000000000000"), "2.jpg" }
                 });
         }
 
