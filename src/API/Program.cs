@@ -1,9 +1,11 @@
 using API.Middlewares;
 using Application;
 using Application.Abstractions;
+using Application.Behaviors.Caching;
 using Application.Behaviors.Validation;
 using Domain.Repositories;
 using FluentValidation;
+using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Repositories.Cities;
@@ -51,10 +53,13 @@ builder.Host.UseSerilog((context, config) =>
 builder.Services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
 builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(QueryCachingPipelineBehavior<,>));
 builder.Services.AddScoped<IHasher, Sha256Hasher>();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 builder.Services.AddSingleton<IImageExtensionValidator, ImageExtensionValidator>();
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheService, InMemoryCacheService>();
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 12000000; //12MB

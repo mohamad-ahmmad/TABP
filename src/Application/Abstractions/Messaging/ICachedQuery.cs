@@ -1,9 +1,9 @@
 ﻿namespace Application.Abstractions.Messaging;
-public interface ICachedQuery<TResponse> : IQuery<TResponse>, ICachedQuey
+public interface ICachedQuery<TResponse> : IQuery<TResponse>, ICachedQuery
 {
 }
 
-public interface ICachedQuey
+public interface ICachedQuery
 {
     string CacheKey { get; }
     TimeSpan? Expiration { get; }

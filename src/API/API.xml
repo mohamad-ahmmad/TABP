@@ -31,6 +31,17 @@
             <response code="409">List of errors.</response>
             <response code="200">The created city.</response>
         </member>
+        <member name="M:API.Controllers.CitiesController.GetCityById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get a city by id
+            </summary>
+            <param name="id"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <response code="401">Unauthorized.</response>
+            <response code="404">City not found.</response>
+            <response code="200">Success.</response>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

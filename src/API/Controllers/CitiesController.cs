@@ -1,9 +1,8 @@
-﻿using Application.Abstractions;
+﻿using API.Models;
+using Application.Abstractions;
 using Application.Cities.Commands.Create;
 using Application.Cities.Dtos;
 using Application.Cities.Queries.GetCityById;
-using Domain.Errors;
-using Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,8 +36,8 @@ public class CitiesController : Controller
     [HttpPost]
     [Authorize]
     [ProducesResponseType(typeof(CityDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(List<Error>), StatusCodes.Status409Conflict)]
-    [ProducesResponseType(typeof(List<Error>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CityDto>> CreateCity([FromForm] string cityJson, [FromForm] IFormFile image, CancellationToken cancellationToken)
     {
         var city = JsonSerializer.Deserialize<CityForCreateDto>(cityJson, new JsonSerializerOptions
@@ -58,15 +57,26 @@ public class CitiesController : Controller
         return Ok(result.Response);
     }
 
+    /// <summary>
+    /// Get a city by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="404">City not found.</response>
+    /// <response code="200">Success.</response>
     [HttpGet("{id}")]
     [Authorize]
-    public async Task<ActionResult<CityDto>> GetCityById(Guid id)
+    [ProducesResponseType(typeof(CityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CityDto>> GetCityById(Guid id, CancellationToken cancellationToken)
     {
         var request = new GetCityByIdCommand(id, _userContext.GetUserLevel());
-        var result = await _mediator.Send(request);
-        if(result.IsFailure)
+        var result = await _mediator.Send(request, cancellationToken);
+        if (result.IsFailure)
         {
-            return StatusCode((int)result.StatusCode, new { result.Errors });
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
         }
 
         return Ok(result.Response);

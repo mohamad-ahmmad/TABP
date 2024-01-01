@@ -40,8 +40,9 @@ public class GetCityByIdCommandHandler : IQueryHandler<GetCityByIdCommand, CityD
             return Result<CityDto>.Failure(CityErrors.CityNotFound, HttpStatusCode.NotFound); 
         }
         var isAdmin = _userContext.GetUserLevel() == UserLevels.Admin;
-        _logger.LogInformation($"The city with '{request.CityId}' ID is found, the user make is admin : {isAdmin} " +
-            $"and has the following ID : {_userContext.GetUserId()}.");
+
+        _logger.LogInformation("The city with '{CityId}' ID is found, the user rule is {Role} " +
+            "and has the following ID : '{UserId}'.", request.CityId, isAdmin ? "Admin" : "User", _userContext.GetUserId());
 
         return MapCityToCityDto(city, isAdmin);
     }
