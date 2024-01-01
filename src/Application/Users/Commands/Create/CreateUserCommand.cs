@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Users.Commands.Create;
 
-public record CreateUserCommand(UserForCreateDTO UserForCreateDto) : IRequest<Result<UserDto>> { }
+public record CreateUserCommand(UserForCreateDTO UserForCreateDto) : ICommand<UserDto> { }

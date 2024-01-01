@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using Application.Abstractions.Messaging;
 using Application.Users.DTOs;
 using AutoMapper;
 using Domain.Entities;
@@ -10,7 +11,7 @@ using MediatR;
 
 namespace Application.Users.Commands.Create;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<UserDto>>
+public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDto>
 {
     private readonly IUsersRepository _userRepo;
     private readonly IUnitOfWork _unitOfWork;

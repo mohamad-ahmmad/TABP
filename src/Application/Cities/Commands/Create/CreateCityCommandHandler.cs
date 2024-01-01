@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using Application.Abstractions.Messaging;
 using Application.Cities.Dtos;
 using AutoMapper;
 using Domain.Entities;
@@ -13,7 +14,7 @@ using System.Net;
 
 namespace Application.Cities.Commands.Create;
 
-public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, Result<CityForAdminDto>>
+public class CreateCityCommandHandler : ICommandHandler<CreateCityCommand, CityForAdminDto>
 {
     private readonly ILogger<CreateCityCommandHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
