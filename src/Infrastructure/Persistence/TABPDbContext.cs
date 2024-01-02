@@ -27,6 +27,9 @@ public class TABPDbContext : DbContext
                     Id = Guid.NewGuid(),
                     CityName = "Japan",
                     CountryName = "Tokyo",
+                    Longitude = 33.1245,
+                    Latitude = 1.12314,
+                    PostOfficePostalCode="Z32Z",
                     ThumbnailUrl = "1.jpg"
                 },
                 new City
@@ -34,6 +37,9 @@ public class TABPDbContext : DbContext
                     Id = Guid.NewGuid(),
                     CityName = "Moscow",
                     CountryName = "Russia",
+                    Longitude = 13.1245,
+                    Latitude = 1.12314,
+                    PostOfficePostalCode = "X32Z",
                     ThumbnailUrl = "2.jpg"
                 }
             );

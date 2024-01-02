@@ -80,6 +80,9 @@ public class CreateCityCommandHandler : ICommandHandler<CreateCityCommand, CityD
         {
             CityName = cityForCreateDto.CityName,
             CountryName = cityForCreateDto.CountryName,
+            Latitude = cityForCreateDto.Latitude,
+            Longitude = cityForCreateDto.Longitude,
+            PostOfficePostalCode = cityForCreateDto.PostOfficePostalCode,
             ThumbnailUrl = imageUrl
         };
 }

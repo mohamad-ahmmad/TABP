@@ -11,6 +11,12 @@ public class CreateCityCommandValidator : AbstractValidator<CreateCityCommand>
             .NotEmpty();
         RuleFor(c => c.CityDto.CountryName)
             .NotEmpty();
+        RuleFor(c => c.CityDto.Latitude)
+            .NotEmpty();
+        RuleFor(c => c.CityDto.PostOfficePostalCode)
+            .NotEmpty();
+        RuleFor(c => c.CityDto.Longitude)
+            .NotEmpty();
         RuleFor(c => c.CityDto.Image)
             .NotNull()
             .Must(img => imageExtensionValidator.Validate(Path.GetExtension(img.FileName)))
