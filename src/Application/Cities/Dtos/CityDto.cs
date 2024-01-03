@@ -14,6 +14,6 @@ public class CityDto
     public Guid? CreatedBy { get; set; }
     public DateTime? LastModified { get; set; }
     public Guid? LastModifiedBy { get; set; }
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; set; } = true;
 }
 

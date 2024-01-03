@@ -10,5 +10,6 @@ public class CityProfile : Profile
     {
         CreateMap<City, CityDto>();
     }
+
 }
 

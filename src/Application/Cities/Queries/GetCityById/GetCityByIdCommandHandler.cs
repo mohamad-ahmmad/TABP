@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions;
 using Application.Abstractions.Messaging;
 using Application.Cities.Dtos;
+using Application.Cities.Mappings;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -44,21 +45,9 @@ public class GetCityByIdCommandHandler : IQueryHandler<GetCityByIdCommand, CityD
         _logger.LogInformation("The city with '{CityId}' ID is found, the user rule is {Role} " +
             "and has the following ID : '{UserId}'.", request.CityId, isAdmin ? "Admin" : "User", _userContext.GetUserId());
 
-        return MapCityToCityDto(city, isAdmin);
+        return CityMapper.MapCityToCityDto(city, _mapper, isAdmin);
     }
 
-    public CityDto MapCityToCityDto(City city, bool isAdmin)
-    {
-        var cityDto = _mapper.Map<CityDto>(city);
-        cityDto.IsAdmin = isAdmin;
-        if(!isAdmin)
-        {
-            cityDto.Created = null;
-            cityDto.CreatedBy = null;
-            cityDto.LastModified = null;
-            cityDto.LastModifiedBy= null;
-        }
-        return cityDto;
-    }
+   
 }
 
