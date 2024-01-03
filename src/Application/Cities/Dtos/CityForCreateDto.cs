@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Application.Cities.Dtos;
 public class CityForCreateDto

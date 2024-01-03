@@ -6,7 +6,8 @@ using Application.Cities.Queries.GetCityById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace API.Controllers;
 
@@ -40,10 +41,21 @@ public class CitiesController : Controller
     [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<CityDto>> CreateCity([FromForm] string cityJson, [FromForm] IFormFile image, CancellationToken cancellationToken)
     {
-        var city = JsonSerializer.Deserialize<CityForCreateDto>(cityJson, new JsonSerializerOptions
+        //Todo: Extract this to a pipleline
+        var settings = new JsonSerializerSettings
         {
-            PropertyNameCaseInsensitive = true
-        });
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy
+                {
+                    OverrideSpecifiedNames = false,
+                    ProcessDictionaryKeys = true,
+                    ProcessExtensionDataNames = true
+                }
+            }
+        };
+
+        var city = JsonConvert.DeserializeObject<CityForCreateDto>(cityJson, settings);
         city!.Image = image;
         var createCityReq = new CreateCityCommand(city);
         var result = await _mediator.Send(createCityReq, cancellationToken);
