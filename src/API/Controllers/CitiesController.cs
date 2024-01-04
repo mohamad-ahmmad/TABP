@@ -4,6 +4,7 @@ using Application.Cities.Commands.Create;
 using Application.Cities.Dtos;
 using Application.Cities.Queries.GetCities;
 using Application.Cities.Queries.GetCityById;
+using Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ public class CitiesController : Controller
     /// <param name="cancellationToken"></param>
     /// <returns>City</returns>
     /// <response code="401">Unauthorized to create a city.</response>
-    /// <response code="409">List of errors.</response>
+    /// <response code="409">The city is already in the system.</response>
     /// <response code="200">The created city.</response>
     [HttpPost]
     [Authorize]
@@ -95,8 +96,21 @@ public class CitiesController : Controller
         return Ok(result.Response);
     }
 
+    /// <summary>
+    /// Get all cities with filtering and pagination options
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <param name="searchTerm">str</param>
+    /// <param name="sortCol">longitude | latitude | cityName | countryName</param>
+    /// <param name="sortOrder">desc | asc</param>
+    /// <param name="page">int</param>
+    /// <param name="pageSize">defualt is 20, maximum is 50</param>
+    /// <returns>List of cities</returns>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="200">Success.</response>
     [HttpGet]
     [Authorize]
+    [ProducesResponseType(typeof(PagedList<CityDto>) ,StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<CityDto>>> GetCities(
         CancellationToken cancellationToken,
         [FromQuery] string? searchTerm,

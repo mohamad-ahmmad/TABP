@@ -28,7 +28,7 @@
             <param name="cancellationToken"></param>
             <returns>City</returns>
             <response code="401">Unauthorized to create a city.</response>
-            <response code="409">List of errors.</response>
+            <response code="409">The city is already in the system.</response>
             <response code="200">The created city.</response>
         </member>
         <member name="M:API.Controllers.CitiesController.GetCityById(System.Guid,System.Threading.CancellationToken)">
@@ -40,6 +40,20 @@
             <returns></returns>
             <response code="401">Unauthorized.</response>
             <response code="404">City not found.</response>
+            <response code="200">Success.</response>
+        </member>
+        <member name="M:API.Controllers.CitiesController.GetCities(System.Threading.CancellationToken,System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Get all cities with filtering and pagination options
+            </summary>
+            <param name="cancellationToken"></param>
+            <param name="searchTerm">str</param>
+            <param name="sortCol">longitude | latitude | cityName | countryName</param>
+            <param name="sortOrder">desc | asc</param>
+            <param name="page">int</param>
+            <param name="pageSize">defualt is 20, maximum is 50</param>
+            <returns>List of cities</returns>
+            <response code="401">Unauthorized.</response>
             <response code="200">Success.</response>
         </member>
         <member name="T:API.Controllers.UsersController">
