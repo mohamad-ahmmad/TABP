@@ -40,18 +40,18 @@ public class CitiesRepository : ICitiesRepository
 
         if(searchTerm != null)
         {
-            citiesQuery.Where(c => 
+            citiesQuery = citiesQuery.Where(c => 
             c.CityName.Contains(searchTerm) || 
             c.CountryName.Contains(searchTerm));
         }
 
         if(sortOrder?.ToLower() == "desc")
         {
-            citiesQuery.OrderByDescending(GetSortProperty(sortCol));
+            citiesQuery = citiesQuery.OrderByDescending(GetSortProperty(sortCol));
         }
         else
         {
-            citiesQuery.OrderBy(GetSortProperty(sortCol));
+            citiesQuery = citiesQuery.OrderBy(GetSortProperty(sortCol));
         }
 
         int count = await citiesQuery.CountAsync(cancellationToken);

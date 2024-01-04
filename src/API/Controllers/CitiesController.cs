@@ -2,6 +2,7 @@
 using Application.Abstractions;
 using Application.Cities.Commands.Create;
 using Application.Cities.Dtos;
+using Application.Cities.Queries.GetCities;
 using Application.Cities.Queries.GetCityById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -89,6 +90,34 @@ public class CitiesController : Controller
         if (result.IsFailure)
         {
             return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
+        }
+
+        return Ok(result.Response);
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult<IEnumerable<CityDto>>> GetCities(
+        CancellationToken cancellationToken,
+        [FromQuery] string? searchTerm,
+        [FromQuery] string? sortCol,
+        [FromQuery] string? sortOrder,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20
+        )
+    {
+        var citiesQuery = new GetCitiesQuery(searchTerm,
+            page,
+            pageSize,
+            sortCol,
+            sortOrder,
+            _userContext.GetUserLevel());
+
+        var result = await _mediator.Send(citiesQuery);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors= result.Errors});
         }
 
         return Ok(result.Response);
