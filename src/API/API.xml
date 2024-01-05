@@ -56,6 +56,18 @@
             <response code="401">Unauthorized.</response>
             <response code="200">Success.</response>
         </member>
+        <member name="M:API.Controllers.CitiesController.DeleteCityById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete a city.
+            </summary>
+            <param name="cityId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <response code="401">Unauthorized</response>
+            <response code="204">Deleted successfully.</response>
+            <response code="400">City doesn't exist.</response>
+            <response code="403">Authenticated but no permission.</response>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

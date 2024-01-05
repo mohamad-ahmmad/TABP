@@ -78,7 +78,7 @@ public class CitiesRepository : ICitiesRepository
 
     public async Task<City?> GetCityByIdAsync(Guid Id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Cities.Where(c=> c.Id == Id).FirstOrDefaultAsync();
+        return await _dbContext.Cities.Where(c=> c.Id == Id && c.IsDeleted ==false).FirstOrDefaultAsync(cancellationToken);
     }
 
     public void DeleteCityById(Guid Id)

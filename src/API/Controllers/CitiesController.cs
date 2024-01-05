@@ -2,12 +2,15 @@
 using Application.Abstractions;
 using Application.Cities.Commands.Create;
 using Application.Cities.Commands.Delete;
+using Application.Cities.Commands.Update;
 using Application.Cities.Dtos;
 using Application.Cities.Queries.GetCities;
 using Application.Cities.Queries.GetCityById;
 using Application.Dtos;
+using Infrastructure.Services.Patch;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -163,6 +166,35 @@ public class CitiesController : Controller
             return StatusCode((int)result.StatusCode ,new ErrorsList { Errors = result.Errors});
         }
         
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Patch a city.
+    /// </summary>
+    /// <param name="patch">JsonDocumentPatch</param>
+    /// <param name="cityId">City Id</param>
+    /// <returns></returns>
+    /// <response code="204">Success</response>
+    /// <response code="404">City not found</response>
+    /// <response code="400">Bad request</response>
+    [HttpPatch("{cityId}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> PatchCity(JsonPatchDocument<CityDto> patch, Guid cityId)
+    {
+        var patchRequest = new JsonPatchRequest<CityDto>(patch);
+        var patchCommand = new UpdateCityCommand(patchRequest, cityId);
+        var result = await _mediator.Send(patchCommand);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, result.Errors);
+        }
+
         return NoContent();
     }
     
