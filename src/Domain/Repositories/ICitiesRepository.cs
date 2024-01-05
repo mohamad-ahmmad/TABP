@@ -13,5 +13,7 @@ public interface ICitiesRepository
         int page,
         int pageSize,
         CancellationToken cancellationToken);
+    void DeleteCityById(Guid Id);
+    Task<bool> DoesCityExistsByIdAsync(Guid cityId, CancellationToken cancellationToken);
 }
 

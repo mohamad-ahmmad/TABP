@@ -36,10 +36,11 @@ public class CitiesRepository : ICitiesRepository
         int pageSize,
         CancellationToken cancellationToken)
     {
-        IQueryable<City> citiesQuery = _dbContext.Cities;
+        IQueryable<City> citiesQuery = _dbContext.Cities.Where(c => c.IsDeleted == false);
 
         if(searchTerm != null)
         {
+            searchTerm = searchTerm.Trim().ToLower();
             citiesQuery = citiesQuery.Where(c => 
             c.CityName.Contains(searchTerm) || 
             c.CountryName.Contains(searchTerm));
@@ -78,6 +79,21 @@ public class CitiesRepository : ICitiesRepository
     public async Task<City?> GetCityByIdAsync(Guid Id, CancellationToken cancellationToken)
     {
         return await _dbContext.Cities.Where(c=> c.Id == Id).FirstOrDefaultAsync();
+    }
+
+    public void DeleteCityById(Guid Id)
+    {
+        _dbContext.Cities.Update(new City
+        {
+            Id = Id,
+            IsDeleted = true,
+        });
+
+    }
+
+    public async Task<bool> DoesCityExistsByIdAsync(Guid cityId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Cities.AnyAsync(c=> c.Id == cityId, cancellationToken);
     }
 }
 

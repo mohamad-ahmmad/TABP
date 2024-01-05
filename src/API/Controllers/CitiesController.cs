@@ -1,6 +1,7 @@
 ﻿using API.Models;
 using Application.Abstractions;
 using Application.Cities.Commands.Create;
+using Application.Cities.Commands.Delete;
 using Application.Cities.Dtos;
 using Application.Cities.Queries.GetCities;
 using Application.Cities.Queries.GetCityById;
@@ -110,7 +111,7 @@ public class CitiesController : Controller
     /// <response code="200">Success.</response>
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(typeof(PagedList<CityDto>) ,StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedList<CityDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<CityDto>>> GetCities(
         CancellationToken cancellationToken,
         [FromQuery] string? searchTerm,
@@ -131,10 +132,39 @@ public class CitiesController : Controller
 
         if (result.IsFailure)
         {
-            return StatusCode((int)result.StatusCode, new ErrorsList { Errors= result.Errors});
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
         }
 
         return Ok(result.Response);
     }
+
+    /// <summary>
+    /// Delete a city.
+    /// </summary>
+    /// <param name="cityId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="204">Deleted successfully.</response>
+    /// <response code="400">City doesn't exist.</response>
+    /// <response code="403">Authenticated but no permission.</response>
+    [HttpDelete("{cityId}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> DeleteCityById(Guid cityId, CancellationToken cancellationToken)
+    {
+        var deleteCityCommand = new DeleteCityCommand(cityId);
+        var result = await _mediator.Send(deleteCityCommand);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode ,new ErrorsList { Errors = result.Errors});
+        }
+        
+        return NoContent();
+    }
+    
 }
 
