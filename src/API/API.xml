@@ -19,6 +19,55 @@
             <response code="400">List of errors.</response>
             <returns>Token</returns>
         </member>
+        <member name="M:API.Controllers.CitiesController.CreateCity(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
+            <summary>
+            Create a city.
+            </summary>
+            <param name="cityJson"></param>
+            <param name="image"></param>
+            <param name="cancellationToken"></param>
+            <returns>City</returns>
+            <response code="401">Unauthorized to create a city.</response>
+            <response code="409">The city is already in the system.</response>
+            <response code="200">The created city.</response>
+        </member>
+        <member name="M:API.Controllers.CitiesController.GetCityById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get a city by id
+            </summary>
+            <param name="id"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <response code="401">Unauthorized.</response>
+            <response code="404">City not found.</response>
+            <response code="200">Success.</response>
+        </member>
+        <member name="M:API.Controllers.CitiesController.GetCities(System.Threading.CancellationToken,System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Get all cities with filtering and pagination options
+            </summary>
+            <param name="cancellationToken"></param>
+            <param name="searchTerm">str</param>
+            <param name="sortCol">longitude | latitude | cityName | countryName</param>
+            <param name="sortOrder">desc | asc</param>
+            <param name="page">int</param>
+            <param name="pageSize">defualt is 20, maximum is 50</param>
+            <returns>List of cities</returns>
+            <response code="401">Unauthorized.</response>
+            <response code="200">Success.</response>
+        </member>
+        <member name="M:API.Controllers.CitiesController.DeleteCityById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete a city.
+            </summary>
+            <param name="cityId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <response code="401">Unauthorized</response>
+            <response code="204">Deleted successfully.</response>
+            <response code="400">City doesn't exist.</response>
+            <response code="403">Authenticated but no permission.</response>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

@@ -22,6 +22,86 @@ namespace Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.City", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CountryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PostOfficePostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a0d45a52-af9e-4e4d-ad19-abe5a67d9758"),
+                            CityName = "Japan",
+                            CountryName = "Tokyo",
+                            Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            IsDeleted = false,
+                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Latitude = 1.12314,
+                            Longitude = 33.124499999999998,
+                            PostOfficePostalCode = "Z32Z",
+                            ThumbnailUrl = "1.jpg"
+                        },
+                        new
+                        {
+                            Id = new Guid("21fb47b6-267a-4cf3-b88f-1159357474bc"),
+                            CityName = "Moscow",
+                            CountryName = "Russia",
+                            Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            IsDeleted = false,
+                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Latitude = 1.12314,
+                            Longitude = 13.124499999999999,
+                            PostOfficePostalCode = "X32Z",
+                            ThumbnailUrl = "2.jpg"
+                        });
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -61,7 +141,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c3fea012-2148-41b4-9b76-b6a30293bf5d"),
+                            Id = new Guid("8c667e48-0b4f-49a8-a964-9c44698bc860"),
                             Email = "mail@gmail.com",
                             Firstname = "Mohammad",
                             IsDeleted = false,
@@ -72,7 +152,7 @@ namespace Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8c667e48-0b4f-49a8-a964-9c44698bc860"),
+                            Id = new Guid("c3fea012-2148-41b4-9b76-b6a30293bf5d"),
                             Email = "ml7m@gmail.com",
                             Firstname = "Melheem",
                             IsDeleted = false,

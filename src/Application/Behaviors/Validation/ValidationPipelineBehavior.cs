@@ -36,7 +36,7 @@ public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior
         
         return await next();
     }
-
+    
     private TResponse ErrorsResult(List<Error> failures)
     {
         var res = (TResponse)(typeof(TResponse)

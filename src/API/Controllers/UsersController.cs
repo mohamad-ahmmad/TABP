@@ -38,10 +38,7 @@ public class UsersController : Controller
         
         if (result.IsFailure)
         {
-            return BadRequest(new
-            {
-                result.Errors
-            });
+            return StatusCode((int)result.StatusCode,new { result.Errors });
         }
 
         return Ok(result.Response);
