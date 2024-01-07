@@ -68,6 +68,17 @@
             <response code="400">City doesn't exist.</response>
             <response code="403">Authenticated but no permission.</response>
         </member>
+        <member name="M:API.Controllers.CitiesController.PatchCity(Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{Application.Cities.Dtos.CityDto},System.Guid)">
+            <summary>
+            Patch a city.
+            </summary>
+            <param name="patch">JsonDocumentPatch</param>
+            <param name="cityId">City Id</param>
+            <returns></returns>
+            <response code="204">Success</response>
+            <response code="404">City not found</response>
+            <response code="400">Bad request</response>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.
