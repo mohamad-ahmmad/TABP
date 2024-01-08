@@ -8,6 +8,7 @@ using Domain.Errors;
 using Domain.Repositories;
 using Domain.Shared;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace Application.Owners.Commands.Create;
 public class CreateOwnerCommandHandler : ICommandHandler<CreateOwnerCommand, OwnerDto>
@@ -34,7 +35,7 @@ public class CreateOwnerCommandHandler : ICommandHandler<CreateOwnerCommand, Own
     {
         if (_userContext.GetUserLevel() != UserLevels.Admin)
         {
-            return OwnerErrors.ForbidToCreateOwner;
+            return Result<OwnerDto>.Failure(OwnerErrors.ForbidToCreateOwner, HttpStatusCode.Forbidden);
         }
         var owner = _mapper.Map<Owner>(request.OwnerForCreateDto);
         await _ownersRepo.AddOwnerAsync(owner);

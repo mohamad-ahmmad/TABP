@@ -79,6 +79,25 @@
             <response code="404">City not found</response>
             <response code="400">Bad request</response>
         </member>
+        <member name="M:API.Controllers.OwnersController.AddOwner(Application.Owners.DTOs.OwnerForCreateDto)">
+            <summary>
+            Create owner
+            </summary>
+            <param name="ownerForCreateDto"></param>
+            <returns>Owner</returns>
+            <response code="400">List of errors.</response>
+            <response code="200">The created owner.</response>
+        </member>
+        <member name="M:API.Controllers.OwnersController.DeleteOwner(System.Guid)">
+            <summary>
+            Delete an owner
+            </summary>
+            <param name="ownerId"></param>
+            <returns></returns>
+            <response code="400">List of errors.</response>
+            <response code="204">Successfully deleted.</response>
+            <response code="404">Owner not found.</response>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

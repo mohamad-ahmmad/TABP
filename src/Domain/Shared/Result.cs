@@ -26,6 +26,11 @@ namespace Domain.Shared
             return new Result<T?>(true, new List<Error> { }, response, HttpStatusCode.OK);
         }
 
+        public static Result<T?> Success(HttpStatusCode statusCode)
+        {
+            return new Result<T?>(true, new List<Error> { }, default(T), statusCode);
+        }
+
         public static implicit operator Result<T>(Error error) => new(false,new List<Error> { error }, default, HttpStatusCode.BadRequest);
         public static implicit operator Result<T>(List<Error> errors) => new(false,errors, default, HttpStatusCode.BadRequest);
         public static implicit operator Result<T>(T response) => new(true,new List<Error> { }, response, HttpStatusCode.OK);

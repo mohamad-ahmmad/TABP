@@ -4,4 +4,6 @@ namespace Domain.Errors;
 public static class OwnerErrors
 {
     public static readonly Error ForbidToCreateOwner= new("Create a owner", "No permission");
+    public static readonly Error ForbidToDeleteOwner= new("Delete a owner", "No permission");
+    public static readonly Error OwnerNotFound= new("Owner", "Owner not found");
 }
