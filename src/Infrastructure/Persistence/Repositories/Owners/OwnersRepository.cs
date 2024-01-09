@@ -36,16 +36,16 @@ public class OwnersRepository : IOwnersRepository
         string? phoneNumber,
         CancellationToken cancellationToken)
     {
-        IQueryable<Owner> query = _dbContext.Owners;
+        IQueryable<Owner> query = _dbContext.Owners.Where(o => o.IsDeleted == false);
 
         if(searchTerm != null)
         {
-            _dbContext.Owners.Where(o => o.FirstName.Contains(searchTerm) || o.LastName.Contains(searchTerm));
+            query = query.Where(o => o.FirstName.Contains(searchTerm) || o.LastName.Contains(searchTerm));
         }
 
         if(phoneNumber != null)
         {
-            _dbContext.Owners.Where(o => o.PhoneNumber.Contains(phoneNumber));
+            query = query.Where(o => o.PhoneNumber.Contains(phoneNumber));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);

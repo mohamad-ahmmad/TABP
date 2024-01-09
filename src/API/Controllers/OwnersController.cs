@@ -1,7 +1,9 @@
 ﻿using API.Models;
+using Application.Dtos;
 using Application.Owners.Commands.Create;
 using Application.Owners.Commands.Delete;
 using Application.Owners.DTOs;
+using Application.Owners.Queries.GetOwners;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,5 +76,36 @@ public class OwnersController : Controller
         }
         
         return NoContent();
+    }
+    /// <summary>
+    /// Get owners.
+    /// </summary>
+    /// <param name="searchTerm">Used for firstname and lastname searching</param>
+    /// <param name="phoneNumber">Used for phonenumber</param>
+    /// <param name="page"></param>
+    /// <param name="pageSize">Maximum size is 30</param>
+    /// <returns></returns>
+    [HttpGet]
+    [Authorize]
+    [ProducesResponseType(typeof(PagedList<OwnerDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList) ,StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorsList) ,StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<PagedList<OwnerDto>>> GetOwners(string? searchTerm,
+        string? phoneNumber,
+        int page =1,
+        int pageSize =30)
+    {
+
+        var ownersQuery = new GetOwnersQuery(searchTerm, phoneNumber, page, pageSize);
+
+        var result = await _sender.Send(ownersQuery);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
+        }
+
+        return Ok(result.Response);
     }
 }

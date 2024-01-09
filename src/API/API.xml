@@ -98,6 +98,16 @@
             <response code="204">Successfully deleted.</response>
             <response code="404">Owner not found.</response>
         </member>
+        <member name="M:API.Controllers.OwnersController.GetOwners(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Get owners.
+            </summary>
+            <param name="searchTerm">Used for firstname and lastname searching</param>
+            <param name="phoneNumber">Used for phonenumber</param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

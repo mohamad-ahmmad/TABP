@@ -9,7 +9,7 @@ using Domain.Repositories;
 using Domain.Shared;
 using System.Net;
 
-namespace Application.Owners.Queries;
+namespace Application.Owners.Queries.GetOwners;
 public class GetOwnersQueryHandler : IQueryHandler<GetOwnersQuery, PagedList<OwnerDto>>
 {
     private readonly IOwnersRepository _ownersRepo;
@@ -28,7 +28,7 @@ public class GetOwnersQueryHandler : IQueryHandler<GetOwnersQuery, PagedList<Own
     }
     public async Task<Result<PagedList<OwnerDto>>> Handle(GetOwnersQuery request, CancellationToken cancellationToken)
     {
-        if(_userContext.GetUserLevel() != UserLevels.Admin)
+        if (_userContext.GetUserLevel() != UserLevels.Admin)
         {
             return Result<PagedList<OwnerDto>>.Failure(OwnerErrors.ForbidToReadOwner, HttpStatusCode.Forbidden);
         }
