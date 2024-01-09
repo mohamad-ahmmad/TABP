@@ -105,8 +105,16 @@
             <param name="searchTerm">Used for firstname and lastname searching</param>
             <param name="phoneNumber">Used for phonenumber</param>
             <param name="page"></param>
-            <param name="pageSize"></param>
+            <param name="pageSize">Maximum size is 30</param>
             <returns></returns>
+        </member>
+        <member name="M:API.Controllers.OwnersController.PatchOwner(System.Guid,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{Application.Owners.DTOs.OwnerDto})">
+            <summary>
+            Patch a owner
+            </summary>
+            <param name="ownerId"></param>
+            <param name="patchDocument"></param>
+            <returns>NoContent</returns>
         </member>
         <member name="T:API.Controllers.UsersController">
             <summary>

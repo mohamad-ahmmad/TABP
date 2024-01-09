@@ -30,6 +30,11 @@ public class OwnersRepository : IOwnersRepository
        user.IsDeleted = true;
     }
 
+    public async Task<Owner?> GetOwnerByIdAsync(Guid ownerId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Owners.Where(o => o.Id == ownerId && o.IsDeleted == false).FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<(IEnumerable<Owner>, int)> GetOwnersAsync(int page,
         int pageSize,
         string? searchTerm,

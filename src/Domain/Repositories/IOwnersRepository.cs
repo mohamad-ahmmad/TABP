@@ -10,6 +10,7 @@ public interface IOwnersRepository
         int pageSize,
         string? searchTerm,
         string? phoneNumber,
-        CancellationToken cancellationToken);    
+        CancellationToken cancellationToken);
+    Task<Owner?> GetOwnerByIdAsync(Guid ownerId, CancellationToken cancellationToken);
 }
 

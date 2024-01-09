@@ -2,10 +2,13 @@
 using Application.Dtos;
 using Application.Owners.Commands.Create;
 using Application.Owners.Commands.Delete;
+using Application.Owners.Commands.Update;
 using Application.Owners.DTOs;
 using Application.Owners.Queries.GetOwners;
+using Infrastructure.Services.Patch;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -107,5 +110,31 @@ public class OwnersController : Controller
         }
 
         return Ok(result.Response);
+    }
+    /// <summary>
+    /// Patch a owner
+    /// </summary>
+    /// <param name="ownerId"></param>
+    /// <param name="patchDocument"></param>
+    /// <returns>NoContent</returns>
+    [HttpPatch("{ownerId}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorsList) ,StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList) ,StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> PatchOwner(Guid ownerId, [FromBody]JsonPatchDocument<OwnerDto> patchDocument)
+    {
+        var patchRequest = new JsonPatchRequest<OwnerDto>(patchDocument);
+        var updateOwnerRequest = new UpdateOwnerCommand(ownerId, patchRequest);
+
+        var result = await _sender.Send(updateOwnerRequest);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
+        }
+
+        return NoContent();
     }
 }
