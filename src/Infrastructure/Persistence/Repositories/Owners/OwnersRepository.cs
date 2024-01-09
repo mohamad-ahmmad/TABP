@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
+using Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +29,31 @@ public class OwnersRepository : IOwnersRepository
        var user = await _dbContext.Owners.Where(o => o.Id == ownerId).FirstAsync(cancellationToken);
        user.IsDeleted = true;
     }
-    
+
+    public async Task<(IEnumerable<Owner>, int)> GetOwnersAsync(int page,
+        int pageSize,
+        string? searchTerm,
+        string? phoneNumber,
+        CancellationToken cancellationToken)
+    {
+        IQueryable<Owner> query = _dbContext.Owners;
+
+        if(searchTerm != null)
+        {
+            _dbContext.Owners.Where(o => o.FirstName.Contains(searchTerm) || o.LastName.Contains(searchTerm));
+        }
+
+        if(phoneNumber != null)
+        {
+            _dbContext.Owners.Where(o => o.PhoneNumber.Contains(phoneNumber));
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var pageList = await query.ToPagedListAsync(page, pageSize, cancellationToken);
+
+        return (pageList, totalCount);
+    }
+
     public async Task<bool> OwnerExistsByOwnerIdAsync(Guid ownerId, CancellationToken cancellationToken)
     {
        return await _dbContext.Owners.AnyAsync(o => o.Id == ownerId && o.IsDeleted == false, cancellationToken);
