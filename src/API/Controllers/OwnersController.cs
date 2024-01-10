@@ -4,7 +4,9 @@ using Application.Owners.Commands.Create;
 using Application.Owners.Commands.Delete;
 using Application.Owners.Commands.Update;
 using Application.Owners.DTOs;
+using Application.Owners.Queries.GetOwnerById;
 using Application.Owners.Queries.GetOwners;
+using Domain.Shared;
 using Infrastructure.Services.Patch;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -136,5 +138,29 @@ public class OwnersController : Controller
         }
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Get owner by Id.
+    /// </summary>
+    /// <param name="ownerId"></param>
+    /// <returns></returns>
+    [HttpGet("{ownerId}")]
+    [Authorize]
+    [ProducesResponseType(typeof(OwnerDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> GetOwnerById(Guid ownerId)
+    {
+        var query = new GetOwnerByIdQuery(ownerId);
+        var result = await _sender.Send(query);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors});
+        }
+
+        return Ok(result.Response);
     }
 }
