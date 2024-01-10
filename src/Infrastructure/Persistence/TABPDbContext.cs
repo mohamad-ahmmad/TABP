@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace Infrastructure.Persistence;
 
@@ -9,11 +10,34 @@ public class TABPDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<City> Cities { get; set; }
+    public DbSet<Hotel> Hotels { get; set; }
+    public DbSet<HotelType> HotelTypes { get; set; }
+    public DbSet<Owner> Owners { get; set; }
 
     public TABPDbContext(DbContextOptions<TABPDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
+
+        mb.Entity<Hotel>()
+            .HasOne(h => h.City)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+            
+        
+        mb.Entity<Hotel>()
+           .HasOne(h => h.HotelType)
+           .WithMany(ht => ht.Hotels)
+           .HasForeignKey(h => h.HotelTypeId)
+           .OnDelete(DeleteBehavior.SetNull);
+
+        mb.Entity<Hotel>()
+            .HasOne(h => h.Owner)
+            .WithMany(o => o.Hotels)
+            .HasForeignKey(h => h.OwnerId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+
         SeedingUsers(mb);
         SeedingCities(mb);
     }
