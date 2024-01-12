@@ -1,6 +1,7 @@
 ﻿using API.Models;
 using Application.HotelTypes.Commands.Create;
 using Application.HotelTypes.Dtos;
+using Application.HotelTypes.Queries.GetHotelTypeById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,26 @@ public class HotelTypesController : Controller
         }
 
         return CreatedAtRoute(new {id = result.Response!.Id}, result.Response);
+    }
+
+    /// <summary>
+    /// Get hotel type by id
+    /// </summary>
+    /// <param name="hotelTypeId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("{hotelTypeId}")]
+    public async Task<ActionResult<HotelTypeDto>> GetHotelTypeById(Guid hotelTypeId, CancellationToken cancellationToken)
+    {
+        var getHotelTypeByIdQuery = new GetHotelTypeByIdQuery(hotelTypeId);
+        var result = await _sender.Send(getHotelTypeByIdQuery, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, result.Response);
+        }
+
+        return Ok(result.Response);
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Persistence.Repositories.HotelTypes;
@@ -18,6 +19,11 @@ public class HotelTypesRepository : IHotelTypesRepository
         await _dbContext.HotelTypes.AddAsync(hotelType, cancellationToken);
         _logger.LogInformation("HotelType with '{hId}' being tracked as '{state}'", hotelType.Id, "EntityState.Added");
         return hotelType;
+    }
+    public async Task<HotelType?> GetHotelTypeByIdAsync(Guid hotelTypeId, CancellationToken cancellationToken)
+    {
+        var ht = await _dbContext.HotelTypes.FirstOrDefaultAsync(ht => ht.Id == hotelTypeId, cancellationToken);
+        return ht;
     }
 }
 
