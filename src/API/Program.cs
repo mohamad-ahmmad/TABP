@@ -25,6 +25,8 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Infrastructure.Persistence.Repositories.Owners;
+using Domain.Errors;
+using Infrastructure.Persistence.Repositories.HotelTypes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -114,6 +116,7 @@ builder.Services.AddScoped<IImageUploaderService>(provider =>
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<IOwnersRepository, OwnersRepository>();
+builder.Services.AddScoped<IHotelTypesRepository, HotelTypesRepository>();
 
 var app = builder.Build();
 

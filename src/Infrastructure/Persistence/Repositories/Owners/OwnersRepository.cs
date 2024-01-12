@@ -54,7 +54,7 @@ public class OwnersRepository : IOwnersRepository
         }
 
         var totalCount = await query.CountAsync(cancellationToken);
-        var pageList = await query.ToPagedListAsync(page, pageSize, cancellationToken);
+        var pageList = await query.OrderBy(o => o.FirstName).ToPagedListAsync(page, pageSize, cancellationToken);
 
         return (pageList, totalCount);
     }

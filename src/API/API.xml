@@ -79,6 +79,14 @@
             <response code="404">City not found</response>
             <response code="400">Bad request</response>
         </member>
+        <member name="M:API.Controllers.HotelTypesController.AddHotelType(Application.HotelTypes.Dtos.HotelTypeDto,System.Threading.CancellationToken)">
+            <summary>
+            Create a hotel type.
+            </summary>
+            <param name="hotelTypeDto"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.OwnersController.AddOwner(Application.Owners.DTOs.OwnerForCreateDto)">
             <summary>
             Create owner
@@ -115,6 +123,13 @@
             <param name="ownerId"></param>
             <param name="patchDocument"></param>
             <returns>NoContent</returns>
+        </member>
+        <member name="M:API.Controllers.OwnersController.GetOwnerById(System.Guid)">
+            <summary>
+            Get owner by Id.
+            </summary>
+            <param name="ownerId"></param>
+            <returns></returns>
         </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
