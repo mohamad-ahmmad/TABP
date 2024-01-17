@@ -79,6 +79,15 @@
             <response code="404">City not found</response>
             <response code="400">Bad request</response>
         </member>
+        <member name="M:API.Controllers.HotelsController.CreateHotel(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
+            <summary>
+            Create a hotel
+            </summary>
+            <param name="hotelForCreateDto"></param>
+            <param name="thumbnail"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.HotelTypesController.AddHotelType(Application.HotelTypes.Dtos.HotelTypeDto,System.Threading.CancellationToken)">
             <summary>
             Create a hotel type.

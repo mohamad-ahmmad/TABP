@@ -53,7 +53,8 @@ public class CreateHotelCommandHandler : ICommandHandler<CreateHotelCommand, Hot
 
         await _hotelRepo.AddHotelAsync(hotel, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
-
+        _logger.LogInformation("Admin with '{adminId}' has successfully added hotel with '{hotelId}'."
+            ,_userContext.GetUserId(), hotel.Id);
         var hotelDto = HotelMappingUtilities.MapHotelToHotelDto(hotel, _userContext.GetUserLevel(), _mapper);
 
         return hotelDto;

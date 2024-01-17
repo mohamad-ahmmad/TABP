@@ -42,8 +42,11 @@ public class HotelsController : Controller
     /// <returns></returns>
     [HttpPost]
     [Authorize]
+    [ProducesResponseType(typeof(void) ,StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(HotelResponse) ,StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorsList) ,StatusCodes.Status400BadRequest)]
     [EndpointName(AddHotel)]
-    public async Task<ActionResult> CreateHotel([FromForm] string hotelForCreateDto, [FromForm] IFormFile thumbnail, CancellationToken cancellationToken)
+    public async Task<ActionResult<HotelResponse>> CreateHotel([FromForm] string hotelForCreateDto, [FromForm] IFormFile thumbnail, CancellationToken cancellationToken)
     {
         var hotel = JsonConvert.DeserializeObject<HotelForCreateDto>(hotelForCreateDto, _serializerSettings);
         hotel!.ThumbnailImage = thumbnail;

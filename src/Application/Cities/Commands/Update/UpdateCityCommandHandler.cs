@@ -66,7 +66,7 @@ public class UpdateCityCommandHandler : ICommandHandler<UpdateCityCommand, Unit>
         }
         
         _mapper.Map(cityDtoPatched, city);
-
+        
         await _unitOfWork.CommitAsync(cancellationToken);
 
         _logger.LogInformation("Admin with '{id}' ID has update the city with '{id}'.", _userContext.GetUserId(), city.Id);
