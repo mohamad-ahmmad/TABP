@@ -23,7 +23,7 @@ public class CitiesController : Controller
 {
     private readonly IMediator _mediator;
     private readonly IUserContext _userContext;
-
+    public const string GetCity = "GetCity";
     public CitiesController(IMediator mediator, IUserContext userContext)
     {
         _mediator = mediator;
@@ -88,6 +88,7 @@ public class CitiesController : Controller
     [Authorize]
     [ProducesResponseType(typeof(CityDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    [EndpointName(GetCity)]
     public async Task<ActionResult<CityDto>> GetCityById(Guid id, CancellationToken cancellationToken)
     {
         var request = new GetCityByIdCommand(id, _userContext.GetUserLevel());

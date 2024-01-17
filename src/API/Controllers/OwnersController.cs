@@ -19,6 +19,7 @@ namespace API.Controllers;
 public class OwnersController : Controller
 {
     private readonly ISender _sender;
+    public const string GetOwner = "GetOwner";
     
     public OwnersController(ISender sender)
     {
@@ -151,6 +152,7 @@ public class OwnersController : Controller
     [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [EndpointName(GetOwner)]
     public async Task<ActionResult> GetOwnerById(Guid ownerId)
     {
         var query = new GetOwnerByIdQuery(ownerId);

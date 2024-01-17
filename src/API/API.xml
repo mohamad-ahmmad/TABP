@@ -87,6 +87,14 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.HotelTypesController.GetHotelTypeById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get hotel type by id
+            </summary>
+            <param name="hotelTypeId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.OwnersController.AddOwner(Application.Owners.DTOs.OwnerForCreateDto)">
             <summary>
             Create owner
