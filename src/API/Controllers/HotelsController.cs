@@ -1,7 +1,9 @@
 ﻿using API.Models;
 using Application.Hotels.Commands.CreateHotel;
 using Application.Hotels.Dtos;
+using Application.Hotels.Queries.GetHotelById;
 using AutoMapper;
+using Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +21,7 @@ public class HotelsController : Controller
     private readonly JsonSerializerSettings _serializerSettings;
     private readonly IMapper _mapper;
     public const string AddHotel = "CreateHotel";
+    public const string GetHotel = "GetHotelById";
 
     public HotelsController(ISender sender,
         LinkGenerator linkGenerator,
@@ -56,10 +59,47 @@ public class HotelsController : Controller
         {
             return StatusCode((int)result.StatusCode, new ErrorsList() { Errors = result.Errors });
         }
-        var hotelResponse = _mapper.Map<HotelResponse>(result.Response);
-        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, CitiesController.GetCity, new { id = result.Response?.CityId })!, "hotel-city", "GET"));
-        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, HotelsController.AddHotel, new {  })!, "self", "POST"));
-        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, OwnersController.GetOwner, new { ownerId = result.Response?.OwnerId })!, "hotel-owner", "GET"));
+        var hotelResponse = MapHotelDtoToHotelResponse(result.Response!);
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, HotelsController.AddHotel, new { })!, "self", "POST"));
         return CreatedAtRoute(new { id = hotelResponse.Id }, hotelResponse);
+    }
+
+    /// <summary>
+    /// Get hotel by id
+    /// </summary>
+    /// <param name="hotelId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("{hotelId}")]
+    [Authorize]
+    [EndpointName(GetHotel)]
+    [ProducesResponseType(typeof(HotelResponse) ,StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void) ,StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<HotelResponse>> GetHotelById(Guid hotelId, CancellationToken cancellationToken)
+    {
+        var getHotelByIdQuery = new GetHotelByIdQuery(hotelId);
+        var result = await _sender.Send(getHotelByIdQuery, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList() { Errors = result.Errors });
+        }
+        var hotelResponse = MapHotelDtoToHotelResponse(result.Response!);
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, GetHotel, new { })!,
+            "self",
+            "GET"));
+        return Ok(hotelResponse);
+    }
+
+    private HotelResponse MapHotelDtoToHotelResponse(HotelDto hotelDto)
+    {
+        var hotelResponse = _mapper.Map<HotelResponse>(hotelDto);
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, CitiesController.GetCity, new { id = hotelDto.CityId })!,
+            "hotel-city",
+            "GET"));
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, OwnersController.GetOwner, new { ownerId = hotelDto.OwnerId })!,
+            "hotel-owner",
+            "GET"));
+        return hotelResponse;
     }
 }
