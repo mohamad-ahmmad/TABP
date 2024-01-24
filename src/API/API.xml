@@ -88,6 +88,22 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.HotelsController.GetHotelById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get hotel by id
+            </summary>
+            <param name="hotelId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.HotelsController.DeleteHotelById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete hotel with specific id.
+            </summary>
+            <param name="hotelId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.HotelTypesController.AddHotelType(Application.HotelTypes.Dtos.HotelTypeDto,System.Threading.CancellationToken)">
             <summary>
             Create a hotel type.

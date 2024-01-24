@@ -21,9 +21,21 @@ public class HotelsRepository : IHotelsRepository
             hotel.Id, "EntityState.Added");
     }
 
+    public async Task<bool> DeleteHotelByIdAsync(Guid hotelId, CancellationToken cancellationToken)
+    {
+        var hotel = await _dbContext.Hotels.FirstOrDefaultAsync(h => h.Id == hotelId && h.IsDeleted == false);
+        if (hotel == null)
+        {
+            return false;
+        }
+
+        hotel.IsDeleted = true;
+        return true;
+    }
+
     public async Task<Hotel?> GetHotelByIdAsync(Guid hotelId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Hotels.Include(h=> h.HotelType).FirstOrDefaultAsync(h => h.Id == hotelId, cancellationToken);
+        return await _dbContext.Hotels.Include(h=> h.HotelType).FirstOrDefaultAsync(h => h.Id == hotelId && h.IsDeleted == false , cancellationToken);
     }
 }
 

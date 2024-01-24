@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using Application.Hotels.Commands.CreateHotel;
+using Application.Hotels.Commands.DeleteHotelById;
 using Application.Hotels.Dtos;
 using Application.Hotels.Queries.GetHotelById;
 using AutoMapper;
@@ -22,7 +23,7 @@ public class HotelsController : Controller
     private readonly IMapper _mapper;
     public const string AddHotel = "CreateHotel";
     public const string GetHotel = "GetHotelById";
-
+    
     public HotelsController(ISender sender,
         LinkGenerator linkGenerator,
         IHttpContextAccessor httpContextAccessor,
@@ -101,5 +102,29 @@ public class HotelsController : Controller
             "hotel-owner",
             "GET"));
         return hotelResponse;
+    }
+    /// <summary>
+    /// Delete hotel with specific id.
+    /// </summary>
+    /// <param name="hotelId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [Authorize]
+    [HttpDelete("{hotelId}")]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status409Conflict)]
+    public async Task<ActionResult> DeleteHotelById(Guid hotelId, CancellationToken cancellationToken)
+    {
+        var deleteHotelByIdCommand = new DeleteHotelByIdCommand(hotelId);
+        var result = await _sender.Send(deleteHotelByIdCommand, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors});
+        }
+
+        return NoContent();
     }
 }
