@@ -1,7 +1,9 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
+using Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Persistence.Repositories.Hotels;
 public class HotelsRepository : IHotelsRepository
@@ -31,6 +33,53 @@ public class HotelsRepository : IHotelsRepository
 
         hotel.IsDeleted = true;
         return true;
+    }
+
+    public async Task<(IEnumerable<Hotel>, int)> GetCitiesAndTotalCount(int page,
+        int pageSize,
+        string? searchTerm,
+        string? sortCol,
+        string? sortOrder,
+        CancellationToken cancellationToken)
+    {
+        IQueryable<Hotel> query = _dbContext.Hotels.Include(h => h.HotelType)
+            .Where(h => h.IsDeleted == false);
+        
+        if(searchTerm != null)
+        {
+            query = query.Where(h => h.HotelName.Contains(searchTerm) ||
+            h.StreetNme.Contains(searchTerm));
+        }
+        
+        if(sortOrder?.ToLower() == "desc")
+        {
+            query = query.OrderByDescending(GetSortProperty(sortCol));
+        }
+        else
+        {
+            query = query.OrderBy(GetSortProperty(sortCol));
+        }
+
+
+        var pagedHotels = await query.ToPagedListAsync(page, pageSize, cancellationToken);
+        var numberOfHotels = await query.CountAsync();
+
+        return new(pagedHotels, numberOfHotels);
+    }
+
+    private Expression<Func<Hotel, object>> GetSortProperty(string? sortCol)
+    {
+        Expression<Func<Hotel, object>> keySelector = sortCol?.ToLower() switch
+        {
+            "hotelname" => h => h.HotelName,
+            "numberofrooms" => h => h.NumberOfRooms,
+            "streetname" => h => h.StreetNme,
+            "longitude" => h => h.Longitude,
+            "latitude" => h => h.Latitude,
+            _ => h => h.HotelName
+        };
+
+        return keySelector;
     }
 
     public async Task<Hotel?> GetHotelByIdAsync(Guid hotelId, CancellationToken cancellationToken)

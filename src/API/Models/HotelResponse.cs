@@ -18,6 +18,7 @@ public class HotelResponse
     public double Longitude { get; set; }
     public double Latitude { get; set; }
     public Guid? OwnerId { get; set; }
+    public Guid? CityId { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? Created { get; set; }
     public Guid? CreatedBy { get; set; }

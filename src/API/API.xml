@@ -79,6 +79,11 @@
             <response code="404">City not found</response>
             <response code="400">Bad request</response>
         </member>
+        <member name="T:API.Controllers.HotelsController">
+            <summary>
+            Hotel endpoints
+            </summary>
+        </member>
         <member name="M:API.Controllers.HotelsController.CreateHotel(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
             <summary>
             Create a hotel
@@ -102,6 +107,17 @@
             </summary>
             <param name="hotelId"></param>
             <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.HotelsController.GetPagedHotels(System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="sortCol">hotelname | numberofrooms | streetname | longitude | latitude </param>
+            <param name="sortOrder">asc | desc</param>
+            <param name="searchTerm">Used for street name and hotel name</param>
+            <param name="page"></param>
+            <param name="pageSize">max is 20</param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.HotelTypesController.AddHotelType(Application.HotelTypes.Dtos.HotelTypeDto,System.Threading.CancellationToken)">
