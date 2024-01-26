@@ -120,6 +120,14 @@
             <param name="pageSize">max is 20</param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.HotelsController.PatchHotelById(System.Guid,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{Application.Hotels.Dtos.HotelDto})">
+            <summary>
+            Patch hotel by hotel's ID.
+            </summary>
+            <param name="hotelId"></param>
+            <param name="jsonPatch"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.HotelTypesController.AddHotelType(Application.HotelTypes.Dtos.HotelTypeDto,System.Threading.CancellationToken)">
             <summary>
             Create a hotel type.

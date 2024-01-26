@@ -2,15 +2,18 @@
 using Application.Abstractions;
 using Application.Hotels.Commands.CreateHotel;
 using Application.Hotels.Commands.DeleteHotelById;
+using Application.Hotels.Commands.PatchHotelById;
 using Application.Hotels.Dtos;
 using Application.Hotels.Queries.GetHotelById;
 using Application.Hotels.Queries.GetHotels;
 using AutoMapper;
-using Domain.Shared;
+using Infrastructure.Services.Patch;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace API.Controllers;
 
@@ -55,9 +58,9 @@ public class HotelsController : Controller
     /// <returns></returns>
     [HttpPost]
     [Authorize]
-    [ProducesResponseType(typeof(void) ,StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(HotelResponse) ,StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ErrorsList) ,StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(HotelResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status400BadRequest)]
     [EndpointName(AddHotel)]
     public async Task<ActionResult<HotelResponse>> CreateHotel([FromForm] string hotelForCreateDto, [FromForm] IFormFile thumbnail, CancellationToken cancellationToken)
     {
@@ -83,8 +86,8 @@ public class HotelsController : Controller
     [HttpGet("{hotelId}")]
     [Authorize]
     [EndpointName(GetHotel)]
-    [ProducesResponseType(typeof(HotelResponse) ,StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void) ,StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(HotelResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<HotelResponse>> GetHotelById(Guid hotelId, CancellationToken cancellationToken)
     {
         var getHotelByIdQuery = new GetHotelByIdQuery(hotelId);
@@ -95,7 +98,7 @@ public class HotelsController : Controller
             return StatusCode((int)result.StatusCode, new ErrorsList() { Errors = result.Errors });
         }
         var hotelResponse = MapHotelDtoToHotelResponse(result.Response!);
-        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, GetHotel, new { })!,
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, GetHotel, new {hotelId})!,
             "self",
             "GET"));
         return Ok(hotelResponse);
@@ -132,7 +135,7 @@ public class HotelsController : Controller
 
         if (result.IsFailure)
         {
-            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors});
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
         }
 
         return NoContent();
@@ -149,15 +152,16 @@ public class HotelsController : Controller
     /// <returns></returns>
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(typeof(void) ,StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(PagedListResponse<HotelResponse>), StatusCodes.Status200OK)]
     [EndpointName(GetHotels)]
     public async Task<ActionResult<PagedListResponse<HotelResponse>>> GetPagedHotels(string? sortCol,
         string? sortOrder,
         string? searchTerm,
-        int page=1,
-        int pageSize=20)
+        int page = 1,
+        int pageSize = 20)
     {
+        //Move it to pipline 
         if (pageSize <= 0 || pageSize > 20)
         {
             pageSize = 20;
@@ -229,7 +233,7 @@ public class HotelsController : Controller
 
     private IEnumerable<HotelResponse> MapHotelsDtoToHotelsResponse(IEnumerable<HotelDto> hotelsDto)
     {
-        var hotelsResponse = _mapper.Map <IEnumerable<HotelResponse>>(hotelsDto);
+        var hotelsResponse = _mapper.Map<IEnumerable<HotelResponse>>(hotelsDto);
         foreach (var item in hotelsResponse)
         {
             item.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, CitiesController.GetCity, new { id = item.CityId })!,
@@ -241,4 +245,30 @@ public class HotelsController : Controller
         }
         return hotelsResponse;
     }
+
+    /// <summary>
+    /// Patch hotel by hotel's ID.
+    /// </summary>
+    /// <param name="hotelId"></param>
+    /// <param name="jsonPatch"></param>
+    /// <returns></returns>
+    [HttpPatch("{hotelId}")]
+    [Authorize]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> PatchHotelById(Guid hotelId, JsonPatchDocument<HotelDto> jsonPatch)
+    {
+        var patchHotelCommand = new PatchHotelByIdCommand(hotelId, new JsonPatchRequest<HotelDto>(jsonPatch));
+        var result = await _sender.Send(patchHotelCommand);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList {Errors = result.Errors});    
+        }
+        
+        return NoContent();
+    }
+    
 }

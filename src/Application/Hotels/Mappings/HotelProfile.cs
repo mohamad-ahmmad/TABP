@@ -9,6 +9,7 @@ public class HotelProfile : Profile
     {
         CreateMap<HotelForCreateDto, Hotel>();
         CreateMap<Hotel, HotelDto>();
+        CreateMap<HotelDto, Hotel>();
     }
 }
 
