@@ -27,6 +27,10 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Infrastructure.Persistence.Repositories.Owners;
 using Domain.Errors;
 using Infrastructure.Persistence.Repositories.HotelTypes;
+using Infrastructure.Persistence.Repositories.Hotels;
+using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +59,7 @@ builder.Host.UseSerilog((context, config) =>
     config.ReadFrom.Configuration(context.Configuration);
 });
 builder.Services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
-builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly);
+builder.Services.AddAutoMapper(typeof(ApplicationAssemblyReference).Assembly, typeof(Program).Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(QueryCachingPipelineBehavior<,>));
 builder.Services.AddScoped<IHasher, Sha256Hasher>();
@@ -117,6 +121,23 @@ builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<IOwnersRepository, OwnersRepository>();
 builder.Services.AddScoped<IHotelTypesRepository, HotelTypesRepository>();
+builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
+builder.Services.AddSingleton((s) =>
+{
+    return new JsonSerializerSettings
+    {
+        ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy
+            {
+                OverrideSpecifiedNames = false,
+                ProcessDictionaryKeys = true,
+                ProcessExtensionDataNames = true
+            }
+        }
+    };
+});
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
