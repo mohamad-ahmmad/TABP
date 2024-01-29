@@ -13,6 +13,8 @@ public class TABPDbContext : DbContext
     public DbSet<Hotel> Hotels { get; set; }
     public DbSet<HotelType> HotelTypes { get; set; }
     public DbSet<Owner> Owners { get; set; }
+    public DbSet<RoomInfo> RoomInfos { get; set; }
+    public DbSet<RoomType> RoomTypes { get; set; }
 
     public TABPDbContext(DbContextOptions<TABPDbContext> options) : base(options) { }
 
@@ -35,6 +37,10 @@ public class TABPDbContext : DbContext
             .HasOne(h => h.Owner)
             .WithMany(o => o.Hotels)
             .HasForeignKey(h => h.OwnerId)
+            .OnDelete(DeleteBehavior.SetNull);
+        mb.Entity<RoomInfo>()
+            .HasOne(ri => ri.RoomType)
+            .WithMany()
             .OnDelete(DeleteBehavior.SetNull);
 
 
