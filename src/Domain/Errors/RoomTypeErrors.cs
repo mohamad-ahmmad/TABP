@@ -3,5 +3,6 @@
 namespace Domain.Errors;
 public class RoomTypeErrors
 {
-    public static Error RoomTypeNotFound = new Error("RoomType", "Room type not found.");
+    public readonly static Error RoomTypeNotFound = new("RoomType", "Room type not found");
+    public readonly static Error ForbidToCreateRoomType = new("Create a room type", "No permission");
 }

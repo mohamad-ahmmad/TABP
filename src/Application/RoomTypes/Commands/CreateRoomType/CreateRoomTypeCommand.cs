@@ -2,6 +2,6 @@
 using Application.RoomTypes.Dtos;
 
 namespace Application.RoomTypes.Commands.CreateRoomType;
-public record CreateRoomTypeCommand(RoomTypeForCreateDto RoomType) : ICommand<RoomTypeDto>
+public record CreateRoomTypeCommand(RoomTypeForCreateDto RoomTypeForCreateDto) : ICommand<RoomTypeDto>
 {
 }
