@@ -188,6 +188,14 @@
             <param name="ownerId"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.RoomTypesController.CreateRoomType(Application.RoomTypes.Dtos.RoomTypeForCreateDto,System.Threading.CancellationToken)">
+            <summary>
+            Create a room type
+            </summary>
+            <param name="roomTypeForCreateDto"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

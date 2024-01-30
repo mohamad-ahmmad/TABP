@@ -8,6 +8,7 @@ public class RoomTypeProfile : Profile
     public RoomTypeProfile()
     {
         CreateMap<RoomTypeForCreateDto, RoomType>();
+        CreateMap<RoomType, RoomTypeDto>();
     }
 }
 

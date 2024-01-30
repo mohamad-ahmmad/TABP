@@ -5,7 +5,7 @@ public class CreateRoomTypeCommandValidator : AbstractValidator<CreateRoomTypeCo
 {
     public CreateRoomTypeCommandValidator()
     {
-        RuleFor(c => c.RoomType.Name)
+        RuleFor(c => c.RoomTypeForCreateDto.Name)
             .NotEmpty();
             
     }
