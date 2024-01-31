@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using Application.RoomTypes.Commands.CreateRoomType;
+using Application.RoomTypes.Commands.DeleteRoomTypeById;
 using Application.RoomTypes.Dtos;
 using Application.RoomTypes.Queries.GetAllRoomTypes;
 using MediatR;
@@ -65,6 +66,28 @@ public class RoomTypesController : Controller
         }
 
         return Ok(result.Response);
+    }
+    /// <summary>
+    /// Delete room type by id.
+    /// </summary>
+    /// <param name="roomTypeId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpDelete("{roomTypeId}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> DeleteRoomTypeById(Guid roomTypeId, CancellationToken cancellationToken)
+    {
+        var deleteRoomTypeByIdCommand = new DeleteRoomTypeByIdCommand(roomTypeId);
+        var result = await _sender.Send(deleteRoomTypeByIdCommand, cancellationToken);
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList() { Errors = result.Errors });
+        }
+
+        return NoContent();
     }
 }
 
