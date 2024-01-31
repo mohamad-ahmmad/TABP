@@ -48,5 +48,9 @@ namespace Domain.Shared
         {
             return new Result<T>(false, errors, default, HttpStatusCode.BadRequest);
         }
+        public static Result<T> Failures(IEnumerable<Error> errors, HttpStatusCode statusCode)
+        {
+            return new Result<T>(false, errors, default, statusCode);
+        }
     }
 }

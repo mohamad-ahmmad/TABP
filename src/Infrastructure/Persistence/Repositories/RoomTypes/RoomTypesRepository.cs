@@ -32,7 +32,7 @@ public class RoomTypesRepository : IRoomTypesRepository
 
     public async Task<IEnumerable<RoomType>> GetAllRoomTypesAsync(CancellationToken cancellationToken)
     {
-        var roomTypes = await _dbContext.RoomTypes.ToListAsync(cancellationToken);
+        var roomTypes = await _dbContext.RoomTypes.Where(rt => rt.IsDeleted == false).ToListAsync(cancellationToken);
         return roomTypes;
     }
 }
