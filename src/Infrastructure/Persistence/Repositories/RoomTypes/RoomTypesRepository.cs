@@ -30,9 +30,9 @@ public class RoomTypesRepository : IRoomTypesRepository
         return Result<object?>.Success(HttpStatusCode.NoContent);
     }
 
-    public async Task<IEnumerable<RoomType>> GetAllRoomTypesAsync()
+    public async Task<IEnumerable<RoomType>> GetAllRoomTypesAsync(CancellationToken cancellationToken)
     {
-        var roomTypes = await _dbContext.RoomTypes.ToListAsync();
+        var roomTypes = await _dbContext.RoomTypes.ToListAsync(cancellationToken);
         return roomTypes;
     }
 }
