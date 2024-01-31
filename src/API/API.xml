@@ -188,6 +188,29 @@
             <param name="ownerId"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.RoomTypesController.CreateRoomType(Application.RoomTypes.Dtos.RoomTypeForCreateDto,System.Threading.CancellationToken)">
+            <summary>
+            Create a room type
+            </summary>
+            <param name="roomTypeForCreateDto"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.RoomTypesController.GetAllRoomTypes(System.Threading.CancellationToken)">
+            <summary>
+            Get all room types.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.RoomTypesController.DeleteRoomTypeById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete room type by id.
+            </summary>
+            <param name="roomTypeId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.UsersController">
             <summary>
             Users endpoints.

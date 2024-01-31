@@ -31,6 +31,8 @@ using Infrastructure.Persistence.Repositories.Hotels;
 using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Domain.Entities;
+using Infrastructure.Persistence.Repositories.RoomTypes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -122,6 +124,7 @@ builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<IOwnersRepository, OwnersRepository>();
 builder.Services.AddScoped<IHotelTypesRepository, HotelTypesRepository>();
 builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
+builder.Services.AddScoped<IRoomTypesRepository, RoomTypesRepository>();
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings
