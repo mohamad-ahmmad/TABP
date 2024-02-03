@@ -15,8 +15,9 @@ public class RoomInfosRepository : IRoomInfosRepository
         _dbContext = dbContext;    
     }
 
-    public async Task AddRoomInfoAsync(RoomInfo roomInfo, CancellationToken cancellationToken)
+    public async Task AddRoomInfoAsync(RoomInfo roomInfo, Guid hotelId, CancellationToken cancellationToken)
     {
+        roomInfo.HotelId = hotelId;
         await _dbContext.AddAsync(roomInfo, cancellationToken);
     }
 
