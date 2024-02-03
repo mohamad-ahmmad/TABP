@@ -8,4 +8,6 @@ public class RoomInfo : BaseSoftDeletableEntity
     public string Description { get; set; } = string.Empty;
     public Guid? RoomTypeId { get; set; }
     public RoomType? RoomType { get; set;} = null!;
+    public Guid? HotelId { get; set; }
+    public Hotel Hotel { get; set; } = null!;
 }
