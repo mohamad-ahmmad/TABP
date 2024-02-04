@@ -19,13 +19,13 @@ public class RoomInfosRepository : IRoomInfosRepository
     {
         roomInfo.HotelId = hotelId;
         await _dbContext.AddAsync(roomInfo, cancellationToken);
-        roomInfo.RoomType = await _dbContext.RoomTypes.FirstAsync(rt => rt.Id == roomInfo.RoomTypeId, cancellationToken);
+        roomInfo.RoomType = await _dbContext.RoomTypes.FirstAsync(rt => rt.Id == roomInfo.RoomTypeId && roomInfo.IsDeleted == false, cancellationToken);
     }
 
     public async Task<Result<object?>> DeleteRoomInfoByIdAsync(Guid roomInfoId, CancellationToken cancellationToken)
     {
         var roomInfo = await _dbContext.RoomInfos
-            .FirstOrDefaultAsync(ri => ri.Id == roomInfoId, cancellationToken);
+            .FirstOrDefaultAsync(ri => ri.Id == roomInfoId && ri.IsDeleted == false, cancellationToken);
         if(roomInfo == null)
         {
             return Result<object?>.Failure(RoomInfoErrors.NotFoundRoomInfo, HttpStatusCode.NotFound);

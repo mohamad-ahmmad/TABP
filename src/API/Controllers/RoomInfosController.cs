@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using Application.RoomInfos.Commands.Create;
+using Application.RoomInfos.Commands.DeleteRoomInfoById;
 using Application.RoomInfos.Dtos;
 using AutoMapper;
 using Azure;
@@ -58,6 +59,8 @@ public class RoomInfosController : Controller
        "POST"));
         return CreatedAtRoute(new { hotelId, roomInfoId = result.Response!.Id}, roomInfoResponse);
     }
+
+    
     
     private RoomInfoResponse GenerateLinks(RoomInfoDto roomInfoDto)
     {
@@ -65,5 +68,31 @@ public class RoomInfosController : Controller
         //Add one for rooms
         //Add one for images
         return response;
+    }
+
+    /// <summary>
+    /// Delete room info by id.
+    /// </summary>
+    /// <param name="roomInfoId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpDelete("{roomInfoId}")]
+    [Authorize]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> DeleteRoomInfoById(Guid roomInfoId, CancellationToken cancellationToken)
+    {
+        var deleteRoomInfoByIdCommand = new DeleteRoomInfoByIdCommand(roomInfoId);
+
+        var result = await _sender.Send(deleteRoomInfoByIdCommand, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors =result.Errors });    
+        }
+
+        return NoContent();
     }
 }
