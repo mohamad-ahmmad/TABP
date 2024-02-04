@@ -107,12 +107,7 @@ public class HotelsController : Controller
     private HotelResponse MapHotelDtoToHotelResponse(HotelDto hotelDto)
     {
         var hotelResponse = _mapper.Map<HotelResponse>(hotelDto);
-        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, CitiesController.GetCity, new { id = hotelDto.CityId })!,
-            "hotel-city",
-            "GET"));
-        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, OwnersController.GetOwner, new { ownerId = hotelDto.OwnerId })!,
-            "hotel-owner",
-            "GET"));
+        AddCommonLinks(hotelResponse);
         return hotelResponse;
     }
 
@@ -236,16 +231,20 @@ public class HotelsController : Controller
         var hotelsResponse = _mapper.Map<IEnumerable<HotelResponse>>(hotelsDto);
         foreach (var item in hotelsResponse)
         {
-            item.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, CitiesController.GetCity, new { id = item.CityId })!,
-            "hotel-city",
-            "GET"));
-            item.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, OwnersController.GetOwner, new { ownerId = item.OwnerId })!,
-                "hotel-owner",
-                "GET"));
+            AddCommonLinks(item);
         }
         return hotelsResponse;
     }
 
+    private void AddCommonLinks(HotelResponse hotelResponse)
+    {
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, CitiesController.GetCity, new { id = hotelResponse.CityId })!,
+        "hotel-city",
+        "GET"));
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, OwnersController.GetOwner, new { ownerId = hotelResponse.OwnerId })!,
+        "hotel-owner",
+        "GET"));
+    }
     /// <summary>
     /// Patch hotel by hotel's ID.
     /// </summary>

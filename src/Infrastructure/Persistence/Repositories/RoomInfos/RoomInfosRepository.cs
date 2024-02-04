@@ -19,6 +19,7 @@ public class RoomInfosRepository : IRoomInfosRepository
     {
         roomInfo.HotelId = hotelId;
         await _dbContext.AddAsync(roomInfo, cancellationToken);
+        roomInfo.RoomType = await _dbContext.RoomTypes.FirstAsync(rt => rt.Id == roomInfo.RoomTypeId, cancellationToken);
     }
 
     public async Task<Result<object?>> DeleteRoomInfoByIdAsync(Guid roomInfoId, CancellationToken cancellationToken)
