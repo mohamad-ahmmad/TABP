@@ -27,10 +27,20 @@ public class RoomInfosController : Controller
         _linkGenerator = linkGenerator;
     }
 
-
+    /// <summary>
+    /// Add room info for a specific hotel by hotel id.
+    /// </summary>
+    /// <param name="hotelId"></param>
+    /// <param name="roomInfoForCreateDto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [Authorize]
     [HttpPost]
     [EndpointName(CreateRoomInfoEndpoint)]
+    [ProducesResponseType(typeof(RoomInfoResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<RoomInfoResponse>> CreateRoomInfo([FromRoute] Guid hotelId,
         [FromBody] RoomInfoForCreateDto roomInfoForCreateDto,
         CancellationToken cancellationToken)
