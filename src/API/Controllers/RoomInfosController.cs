@@ -2,9 +2,8 @@
 using Application.RoomInfos.Commands.Create;
 using Application.RoomInfos.Commands.DeleteRoomInfoById;
 using Application.RoomInfos.Dtos;
+using Application.RoomInfos.Queries.GetAllRoomInfosByHotelId;
 using AutoMapper;
-using Azure;
-using Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +17,7 @@ public class RoomInfosController : Controller
     private readonly IMapper _mapper;
     private readonly LinkGenerator _linkGenerator;
     public const string CreateRoomInfoEndpoint = nameof(CreateRoomInfoEndpoint);
+    public const string GetAllRoomInfoForHotel = nameof(GetAllRoomInfoForHotel);
 
     public RoomInfosController(ISender sender,
         IMapper mapper,
@@ -53,21 +53,57 @@ public class RoomInfosController : Controller
         {
             return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
         }
-        var roomInfoResponse = GenerateLinks(result.Response!);
-        roomInfoResponse.Links.Add(new Link(_linkGenerator.GetPathByName(CreateRoomInfoEndpoint, new {hotelId})!,
+        var roomInfoResponse = _mapper.Map<RoomInfoResponse>(result.Response!);
+        GenerateLinks(roomInfoResponse);
+        roomInfoResponse.Links.Add(new Link(_linkGenerator.GetPathByName(CreateRoomInfoEndpoint, new { hotelId })!,
        "self",
        "POST"));
-        return CreatedAtRoute(new { hotelId, roomInfoId = result.Response!.Id}, roomInfoResponse);
+        return CreatedAtRoute(new { hotelId, roomInfoId = result.Response!.Id }, roomInfoResponse);
     }
 
-    
-    
-    private RoomInfoResponse GenerateLinks(RoomInfoDto roomInfoDto)
+    /// <summary>
+    /// Get all room-infos for a hotel.
+    /// </summary>
+    /// <param name="hotelId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Authorize]
+    [EndpointName(GetAllRoomInfoForHotel)]
+    [ProducesResponseType(typeof(IEnumerable<RoomInfoResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+
+    public async Task<ActionResult<IEnumerable<RoomInfoResponse>>> GetRoomInfosForHotel(Guid hotelId,
+    CancellationToken cancellationToken)
     {
-        var response = _mapper.Map<RoomInfoResponse>(roomInfoDto);
+        var getAllRoomInfosByHotelIdQuery = new GetAllRoomInfosByHotelIdQuery(hotelId);
+
+        var result = await _sender.Send(getAllRoomInfosByHotelIdQuery, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
+        }
+
+        var roomInfosResponse = _mapper.Map<IEnumerable<RoomInfoResponse>>(result.Response!);
+
+        foreach (var item in roomInfosResponse)
+        {
+            GenerateLinks(item);
+            item.Links.Add(new Link(_linkGenerator.GetPathByName(GetAllRoomInfoForHotel, new { hotelId })!,
+                "self",
+                "GET"));
+        }
+
+        return Ok(roomInfosResponse);
+    }
+
+
+    private RoomInfoResponse GenerateLinks(RoomInfoResponse roomInfoResponse)
+    {
         //Add one for rooms
         //Add one for images
-        return response;
+        return roomInfoResponse;
     }
 
     /// <summary>
@@ -90,9 +126,11 @@ public class RoomInfosController : Controller
 
         if (result.IsFailure)
         {
-            return StatusCode((int)result.StatusCode, new ErrorsList { Errors =result.Errors });    
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
         }
 
         return NoContent();
     }
+
+
 }

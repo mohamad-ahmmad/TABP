@@ -33,10 +33,11 @@ public class RoomInfosRepository : IRoomInfosRepository
         roomInfo.IsDeleted = true;
         return Result<object?>.Success(HttpStatusCode.NoContent);
     }
-
+    
     public async Task<IEnumerable<RoomInfo>> GetAllRoomInfosAsync(Guid hotelId, CancellationToken cancellationToken)
     {
         var roomInfos = await _dbContext.RoomInfos
+            .Include(ri => ri.RoomType)
             .Where(r => r.IsDeleted == false && r.HotelId == hotelId)
             .ToListAsync(cancellationToken);
 

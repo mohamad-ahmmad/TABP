@@ -197,6 +197,14 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get all room-infos for a hotel.
+            </summary>
+            <param name="hotelId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.RoomInfosController.DeleteRoomInfoById(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Delete room info by id.
