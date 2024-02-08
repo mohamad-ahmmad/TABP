@@ -4,6 +4,7 @@ using Domain.Entities;
 namespace API.Models;
 public class RoomInfoResponse
 {
+    public Guid Id { get; set; }
     public int AdultsCapacity { get; set; }
     public int ChildrenCapacity { get; set; }
     public string Description { get; set; } = string.Empty;
