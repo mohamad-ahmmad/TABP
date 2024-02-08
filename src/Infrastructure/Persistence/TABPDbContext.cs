@@ -15,6 +15,7 @@ public class TABPDbContext : DbContext
     public DbSet<Owner> Owners { get; set; }
     public DbSet<RoomInfo> RoomInfos { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
+    public DbSet<Room> Rooms { get; set; }
 
     public TABPDbContext(DbContextOptions<TABPDbContext> options) : base(options) { }
 
