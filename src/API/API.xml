@@ -188,6 +188,31 @@
             <param name="ownerId"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.RoomInfosController.CreateRoomInfo(System.Guid,Application.RoomInfos.Dtos.RoomInfoForCreateDto,System.Threading.CancellationToken)">
+            <summary>
+            Add room info for a specific hotel by hotel id.
+            </summary>
+            <param name="hotelId"></param>
+            <param name="roomInfoForCreateDto"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get all room-infos for a hotel.
+            </summary>
+            <param name="hotelId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.RoomInfosController.DeleteRoomInfoById(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete room info by id.
+            </summary>
+            <param name="roomInfoId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.RoomTypesController.CreateRoomType(Application.RoomTypes.Dtos.RoomTypeForCreateDto,System.Threading.CancellationToken)">
             <summary>
             Create a room type

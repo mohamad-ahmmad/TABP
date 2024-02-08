@@ -33,6 +33,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Domain.Entities;
 using Infrastructure.Persistence.Repositories.RoomTypes;
+using Infrastructure.Persistence.Repositories.RoomInfos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -125,6 +126,7 @@ builder.Services.AddScoped<IOwnersRepository, OwnersRepository>();
 builder.Services.AddScoped<IHotelTypesRepository, HotelTypesRepository>();
 builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
 builder.Services.AddScoped<IRoomTypesRepository, RoomTypesRepository>();
+builder.Services.AddScoped<IRoomInfosRepository, RoomInfosRepository>();
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings
@@ -141,6 +143,7 @@ builder.Services.AddSingleton((s) =>
     };
 });
 builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 

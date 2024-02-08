@@ -40,7 +40,7 @@ public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior
     private TResponse ErrorsResult(List<Error> failures)
     {
         var res = (TResponse)(typeof(TResponse)
-            .GetStaticMethod("Failures")
+            .GetMethod("Failures", new Type[] {typeof(IEnumerable<Error>)})!
             .Invoke(null, new object[] {failures}))!;
         return res;
     }
