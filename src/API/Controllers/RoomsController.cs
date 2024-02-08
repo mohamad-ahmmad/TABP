@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using Application.Rooms.Commands.Create;
+using Application.Rooms.Commands.DeleteRoomById;
 using Application.Rooms.Dtos;
 using AutoMapper;
 using MediatR;
@@ -53,5 +54,31 @@ public class RoomsController : Controller
         }
 
         return CreatedAtRoute(new { hotelId, roomInfoId }, result.Response);
+    }
+
+    /// <summary>
+    /// Delete a room by id
+    /// </summary>
+    /// <param name="roomId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpDelete("{roomId}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> DeleteRoomById(Guid roomId, CancellationToken cancellationToken)
+    {
+        var deleteRoomByIdCommand = new DeleteRoomByIdCommand(roomId);
+
+        var result = await _sender.Send(deleteRoomByIdCommand, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, result.Errors);
+        }
+
+        return NoContent();
     }
 }
