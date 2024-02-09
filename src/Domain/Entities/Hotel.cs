@@ -19,4 +19,5 @@ public class Hotel : BaseSoftDeletableAuditableEntity
     public double Latitude { get; set; }
     public Guid? OwnerId { get; set;}
     public Owner Owner { get; set; } = new Owner();
+    public List<Amenity> Amenities { get; set; } = new List<Amenity>();
 }

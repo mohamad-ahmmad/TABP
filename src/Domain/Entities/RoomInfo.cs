@@ -9,5 +9,6 @@ public class RoomInfo : BaseSoftDeletableEntity
     public Guid? RoomTypeId { get; set; }
     public RoomType? RoomType { get; set;} = null!;
     public Guid? HotelId { get; set; }
-    public Hotel Hotel { get; set; } = null!;
+    public Hotel? Hotel { get; set; } = null!;
+    public List<Room> Rooms { get; set; } = new List<Room>();
 }
