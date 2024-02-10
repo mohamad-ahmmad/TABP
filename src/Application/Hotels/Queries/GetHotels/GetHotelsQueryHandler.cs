@@ -24,6 +24,12 @@ public class GetHotelsQueryHandler : IQueryHandler<GetHotelsQuery, PagedList<Hot
         var pagedHotelsAndTotalNumber = await _hotelRepo.GetCitiesAndTotalCount(
             request.Page,
             request.PageSize,
+            request.MinPrice,
+            request.MaxPrice,
+            request.HotelRating,
+            request.Amenities,
+            request.HotelType,
+            request.RoomType,
             request.SearchTerm,
             request.SortCol,
             request.SortOrder,

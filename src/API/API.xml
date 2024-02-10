@@ -118,7 +118,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.HotelsController.GetPagedHotels(System.String,System.String,System.String,System.Int32,System.Int32)">
+        <member name="M:API.Controllers.HotelsController.GetPagedHotels(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Double},System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32)">
             <summary>
             
             </summary>
@@ -127,6 +127,12 @@
             <param name="searchTerm">Used for street name and hotel name</param>
             <param name="page"></param>
             <param name="pageSize">max is 20</param>
+            <param name="amenities"></param>
+            <param name="hotelRating">hotel rating like: 4.5 3.43</param>
+            <param name="hotelType">Boutique | ....</param>
+            <param name="maxPrice"></param>
+            <param name="minPrice"></param>
+            <param name="roomType"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.HotelsController.PatchHotelById(System.Guid,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{Application.Hotels.Dtos.HotelDto})">

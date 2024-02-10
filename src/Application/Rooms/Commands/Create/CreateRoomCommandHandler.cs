@@ -41,7 +41,7 @@ public class CreateRoomCommandHandler : ICommandHandler<CreateRoomCommand, RoomD
 
         await _unitOfWork.CommitAsync(cancellationToken);
         var roomDto = _mapper.Map<RoomDto?>(room);
-        roomDto.IsAdmin = true;
+        roomDto!.IsAdmin = true;
         return Result<RoomDto?>.Success(roomDto);
     }
 }

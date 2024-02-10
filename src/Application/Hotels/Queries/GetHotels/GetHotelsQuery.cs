@@ -5,14 +5,23 @@ using Application.Hotels.Dtos;
 using Domain.Enums;
 
 namespace Application.Hotels.Queries.GetHotels;
-public record GetHotelsQuery(string? SortCol,
+public record GetHotelsQuery(int? MinPrice,
+    int? MaxPrice,
+    double? HotelRating,
+    string? Amenities,
+    string? HotelType,
+    string? RoomType,
+    string? SortCol,
     string? SortOrder,
     string? SearchTerm,
     int Page,
     int PageSize,
     UserLevels UserLevel) : ICachedQuery<PagedList<HotelDto>>
 {
-    public string CacheKey => $"hotels-{SortOrder}-{SearchTerm}-{Page}-{PageSize}-{UserLevel}";
+    public string CacheKey => $"hotels-{SortOrder}-{SearchTerm}-{Page}" +
+        $"-{MinPrice}-{MaxPrice}-{HotelRating}" +
+        $"-{Amenities}-{RoomType}-{SortCol}" +
+        $"-{HotelType}-{PageSize}-{UserLevel}";
 
     public TimeSpan? Expiration => null;
 }

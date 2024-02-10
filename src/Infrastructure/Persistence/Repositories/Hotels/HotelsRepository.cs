@@ -37,14 +37,42 @@ public class HotelsRepository : IHotelsRepository
 
     public async Task<(IEnumerable<Hotel>, int)> GetCitiesAndTotalCount(int page,
         int pageSize,
+        int? minPrice,
+        int? maxPrice,
+        double? hotelRating,
+        string? amenities,
+        string? hotelType,
+        string? roomType,
         string? searchTerm,
         string? sortCol,
         string? sortOrder,
         CancellationToken cancellationToken)
     {
+
         IQueryable<Hotel> query = _dbContext.Hotels.Include(h => h.HotelType)
             .Where(h => h.IsDeleted == false);
         
+        if(minPrice != null)
+        {
+            query = query.Where(h => h.Rooms.Any(r => r.PricePerDay >= minPrice));
+        }
+
+        if(maxPrice != null)
+        {
+            query = query.Where(h => h.Rooms.Any(r => r.PricePerDay <= maxPrice));
+        }
+
+        if(hotelRating != null)
+        {
+            query = query.Where(h => h.StarRatingAcc/h.NumberOfPeopleRated >=  hotelRating);
+        }
+
+        if(amenities != null)
+        {
+            amenities = amenities.ToLower();
+            query = query.Where(h => h.Amenities.Any(a => amenities.Contains(a.Description)));
+        }
+
         if(searchTerm != null)
         {
             query = query.Where(h => h.HotelName.Contains(searchTerm) ||

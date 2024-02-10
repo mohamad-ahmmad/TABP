@@ -8,6 +8,12 @@ public interface IHotelsRepository
     Task<bool> DeleteHotelByIdAsync(Guid hotelId, CancellationToken cancellationToken);
     Task<(IEnumerable<Hotel>, int)> GetCitiesAndTotalCount(int page,
         int pageSize,
+        int? minPrice,
+        int? maxPrice,
+        double? hotelRating,
+        string? amenities,
+        string? hotelType,
+        string? roomType,
         string? searchTerm,
         string? sortCol,
         string? sortOrder,

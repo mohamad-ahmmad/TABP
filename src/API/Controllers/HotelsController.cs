@@ -7,6 +7,7 @@ using Application.Hotels.Dtos;
 using Application.Hotels.Queries.GetHotelById;
 using Application.Hotels.Queries.GetHotels;
 using AutoMapper;
+using Domain.Entities;
 using Infrastructure.Services.Patch;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -144,13 +145,25 @@ public class HotelsController : Controller
     /// <param name="searchTerm">Used for street name and hotel name</param>
     /// <param name="page"></param>
     /// <param name="pageSize">max is 20</param>
+    /// <param name="amenities"></param>
+    /// <param name="hotelRating">hotel rating like: 4.5 3.43</param>
+    /// <param name="hotelType">Boutique | ....</param>
+    /// <param name="maxPrice"></param>
+    /// <param name="minPrice"></param>
+    /// <param name="roomType"></param>
     /// <returns></returns>
     [HttpGet]
     [Authorize]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(PagedListResponse<HotelResponse>), StatusCodes.Status200OK)]
     [EndpointName(GetHotels)]
-    public async Task<ActionResult<PagedListResponse<HotelResponse>>> GetPagedHotels(string? sortCol,
+    public async Task<ActionResult<PagedListResponse<HotelResponse>>> GetPagedHotels(int? minPrice,
+        int? maxPrice,
+        double? hotelRating,
+        string? amenities,
+        string? hotelType,
+        string? roomType,
+        string? sortCol,
         string? sortOrder,
         string? searchTerm,
         int page = 1,
@@ -162,7 +175,18 @@ public class HotelsController : Controller
             pageSize = 20;
         }
 
-        var getPagedHotelsQuery = new GetHotelsQuery(sortCol, sortOrder, searchTerm, page, pageSize, _userContext.GetUserLevel());
+        var getPagedHotelsQuery = new GetHotelsQuery(
+            minPrice,
+            maxPrice,
+            hotelRating,
+            amenities,
+            hotelType,
+            roomType,
+            sortCol,
+            sortOrder,
+            searchTerm, page,
+            pageSize,
+            _userContext.GetUserLevel());
 
         var result = await _sender.Send(getPagedHotelsQuery);
 
