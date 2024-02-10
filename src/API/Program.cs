@@ -35,6 +35,7 @@ using Domain.Entities;
 using Infrastructure.Persistence.Repositories.RoomTypes;
 using Infrastructure.Persistence.Repositories.RoomInfos;
 using Infrastructure.Persistence.Repositories.Rooms;
+using Infrastructure.Persistence.Repositories.Amenities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -129,6 +130,7 @@ builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
 builder.Services.AddScoped<IRoomTypesRepository, RoomTypesRepository>();
 builder.Services.AddScoped<IRoomInfosRepository, RoomInfosRepository>();
 builder.Services.AddScoped<IRoomsRepository, RoomsRepository>();
+builder.Services.AddScoped<IAmenitiesRepository, AmenitiesRepository>();
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings
