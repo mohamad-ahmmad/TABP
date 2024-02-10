@@ -95,7 +95,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1791ad54-a52f-49f3-a0d5-de3b3ce786a0"),
+                            Id = new Guid("365399a6-d3a8-4512-9da8-7de00515e803"),
                             CityName = "Japan",
                             CountryName = "Tokyo",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -110,7 +110,7 @@ namespace Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("81a86e2c-ef3a-4bdb-8161-e114b69a9f47"),
+                            Id = new Guid("a4e14237-5883-4710-b700-5a867cd29e56"),
                             CityName = "Moscow",
                             CountryName = "Russia",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -132,7 +132,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CityId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
@@ -150,7 +149,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("HotelTypeId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -175,7 +173,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<Guid?>("OwnerId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PostalCode")
@@ -291,9 +288,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("RoomInfoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RoomInfoId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("RoomNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -301,8 +295,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RoomInfoId");
-
-                    b.HasIndex("RoomInfoId1");
 
                     b.ToTable("Rooms");
                 });
@@ -435,20 +427,17 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.HotelType", "HotelType")
                         .WithMany("Hotels")
                         .HasForeignKey("HotelTypeId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Owner", "Owner")
                         .WithMany("Hotels")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("City");
 
@@ -459,14 +448,10 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
                 {
-                    b.HasOne("Domain.Entities.RoomInfo", null)
+                    b.HasOne("Domain.Entities.RoomInfo", "RoomInfo")
                         .WithMany("Rooms")
                         .HasForeignKey("RoomInfoId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Domain.Entities.RoomInfo", "RoomInfo")
-                        .WithMany()
-                        .HasForeignKey("RoomInfoId1");
 
                     b.Navigation("RoomInfo");
                 });
