@@ -4,6 +4,15 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="M:API.Controllers.AmenitiesController.CreateAmenity(System.Guid,API.Models.AmenityForCreationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Create an amenity
+            </summary>
+            <param name="hotelId"></param>
+            <param name="amenityForCreationRequest"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.AuthenticationController">
             <summary>
             Controller for authenticating users.
