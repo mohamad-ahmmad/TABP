@@ -14,6 +14,9 @@ public record GetHotelsQuery(int? MinPrice,
     string? SortCol,
     string? SortOrder,
     string? SearchTerm,
+    int? NumberOfAdults,
+    int? NumberOfChildren,
+    int? NumberOfRooms,
     int Page,
     int PageSize,
     UserLevels UserLevel) : ICachedQuery<PagedList<HotelDto>>
@@ -21,7 +24,8 @@ public record GetHotelsQuery(int? MinPrice,
     public string CacheKey => $"hotels-{SortOrder}-{SearchTerm}-{Page}" +
         $"-{MinPrice}-{MaxPrice}-{HotelRating}" +
         $"-{Amenities}-{RoomType}-{SortCol}" +
-        $"-{HotelType}-{PageSize}-{UserLevel}";
+        $"-{HotelType}-{PageSize}-{UserLevel}" +
+        $"-{NumberOfAdults}-{NumberOfChildren}-{NumberOfRooms}";
 
     public TimeSpan? Expiration => null;
 }

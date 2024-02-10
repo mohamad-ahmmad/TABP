@@ -151,6 +151,9 @@ public class HotelsController : Controller
     /// <param name="maxPrice"></param>
     /// <param name="minPrice"></param>
     /// <param name="roomType"></param>
+    /// <param name="numberOfAdults"></param>
+    /// <param name="numberOfChildren"></param>
+    /// <param name="numberOfRooms"></param>
     /// <returns></returns>
     [HttpGet]
     [Authorize]
@@ -166,6 +169,9 @@ public class HotelsController : Controller
         string? sortCol,
         string? sortOrder,
         string? searchTerm,
+        int? numberOfAdults,
+        int? numberOfChildren,
+        int? numberOfRooms,
         int page = 1,
         int pageSize = 20)
     {
@@ -184,7 +190,11 @@ public class HotelsController : Controller
             roomType,
             sortCol,
             sortOrder,
-            searchTerm, page,
+            searchTerm,
+            numberOfAdults,
+            numberOfChildren,
+            numberOfRooms,
+            page,
             pageSize,
             _userContext.GetUserLevel());
 

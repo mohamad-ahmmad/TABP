@@ -35,7 +35,7 @@ public class HotelsRepository : IHotelsRepository
         return true;
     }
 
-    public async Task<(IEnumerable<Hotel>, int)> GetCitiesAndTotalCount(int page,
+    public async Task<(IEnumerable<Hotel>, int)> GetHotelsAndTotalCount(int page,
         int pageSize,
         int? minPrice,
         int? maxPrice,
@@ -46,25 +46,47 @@ public class HotelsRepository : IHotelsRepository
         string? searchTerm,
         string? sortCol,
         string? sortOrder,
+        int? numberOfAdults,
+        int? numberOfChildren,
+        int? numberOfRooms,
         CancellationToken cancellationToken)
     {
-
+        numberOfAdults ??= 2;
+        numberOfChildren ??= 0;
+        numberOfRooms ??= 1;
+        
         IQueryable<Hotel> query = _dbContext.Hotels.Include(h => h.HotelType)
             .Where(h => h.IsDeleted == false);
         
         if(minPrice != null)
         {
-            query = query.Where(h => h.Rooms.Any(r => r.PricePerDay >= minPrice));
+            query = query.Where(h => h.RoomInfos.Any(
+                ri => ri.Rooms.Any(r => r.PricePerDay >= minPrice)
+                )
+            );
         }
 
         if(maxPrice != null)
         {
-            query = query.Where(h => h.Rooms.Any(r => r.PricePerDay <= maxPrice));
+            query = query.Where(h => h.RoomInfos.Any(
+                ri => ri.Rooms.Any(r => r.PricePerDay <= maxPrice)
+                )
+            );
         }
 
         if(hotelRating != null)
         {
             query = query.Where(h => h.StarRatingAcc/h.NumberOfPeopleRated >=  hotelRating);
+        }
+
+        if(roomType != null)
+        {
+            query = query.Where(h => h.RoomInfos.Any(ri => ri.RoomType!.Name == roomType));
+        }
+
+        if(hotelType != null)
+        {
+            query = query.Where(h => h.HotelType!.Type == hotelType);
         }
 
         if(amenities != null)
@@ -90,7 +112,7 @@ public class HotelsRepository : IHotelsRepository
 
 
         var pagedHotels = await query.ToPagedListAsync(page, pageSize, cancellationToken);
-        var numberOfHotels = await query.CountAsync();
+        var numberOfHotels = await query.CountAsync(cancellationToken);
 
         return new(pagedHotels, numberOfHotels);
     }

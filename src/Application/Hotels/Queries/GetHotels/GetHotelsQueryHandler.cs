@@ -21,7 +21,7 @@ public class GetHotelsQueryHandler : IQueryHandler<GetHotelsQuery, PagedList<Hot
     }
     public async Task<Result<PagedList<HotelDto>>> Handle(GetHotelsQuery request, CancellationToken cancellationToken)
     {
-        var pagedHotelsAndTotalNumber = await _hotelRepo.GetCitiesAndTotalCount(
+        var pagedHotelsAndTotalNumber = await _hotelRepo.GetHotelsAndTotalCount(
             request.Page,
             request.PageSize,
             request.MinPrice,
