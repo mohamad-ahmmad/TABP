@@ -52,10 +52,11 @@ public class TABPDbContext : DbContext
 
         mb.Entity<RoomInfo>()
             .HasMany(ri => ri.Rooms)
-            .WithOne()
+            .WithOne(r => r.RoomInfo)
             .HasForeignKey(r => r.RoomInfoId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
-        
+            
 
 
         SeedingUsers(mb);
