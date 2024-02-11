@@ -65,6 +65,9 @@ public class RoomInfosController : Controller
     /// Get all room-infos for a hotel.
     /// </summary>
     /// <param name="hotelId"></param>
+    /// <param name="maxPrice"></param>
+    /// <param name="minPrice"></param>
+    /// <param name="roomType"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
@@ -72,11 +75,17 @@ public class RoomInfosController : Controller
     [EndpointName(GetAllRoomInfoForHotel)]
     [ProducesResponseType(typeof(IEnumerable<RoomInfoResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-
+    
     public async Task<ActionResult<IEnumerable<RoomInfoResponse>>> GetRoomInfosForHotel(Guid hotelId,
+        string? roomType,
+        int? minPrice,
+        int? maxPrice,
     CancellationToken cancellationToken)
     {
-        var getAllRoomInfosByHotelIdQuery = new GetAllRoomInfosByHotelIdQuery(hotelId);
+        var getAllRoomInfosByHotelIdQuery = new GetAllRoomInfosByHotelIdQuery(hotelId,
+            roomType,
+            minPrice,
+            maxPrice);
 
         var result = await _sender.Send(getAllRoomInfosByHotelIdQuery, cancellationToken);
 

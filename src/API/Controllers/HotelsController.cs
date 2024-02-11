@@ -108,7 +108,7 @@ public class HotelsController : Controller
     private HotelResponse MapHotelDtoToHotelResponse(HotelDto hotelDto)
     {
         var hotelResponse = _mapper.Map<HotelResponse>(hotelDto);
-        AddCommonLinks(hotelResponse);
+        AddCommonLinks(hotelResponse, null);
         return hotelResponse;
     }
 
@@ -205,7 +205,8 @@ public class HotelsController : Controller
             return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
         }
 
-        var hotelsResponse = MapHotelsDtoToHotelsResponse(result.Response!.Data);
+        var hotelsResponse = MapHotelsDtoToHotelsResponse(result.Response!.Data,
+            getPagedHotelsQuery);
 
         var pagedHotelsResponse = new PagedListResponse<HotelResponse>(hotelsResponse,
             page,
@@ -260,17 +261,18 @@ public class HotelsController : Controller
         }
     }
 
-    private IEnumerable<HotelResponse> MapHotelsDtoToHotelsResponse(IEnumerable<HotelDto> hotelsDto)
+    private IEnumerable<HotelResponse> MapHotelsDtoToHotelsResponse(IEnumerable<HotelDto> hotelsDto,
+        GetHotelsQuery getHotelsQuery)
     {
         var hotelsResponse = _mapper.Map<IEnumerable<HotelResponse>>(hotelsDto);
         foreach (var item in hotelsResponse)
         {
-            AddCommonLinks(item);
+            AddCommonLinks(item, getHotelsQuery);
         }
         return hotelsResponse;
     }
 
-    private void AddCommonLinks(HotelResponse hotelResponse)
+    private void AddCommonLinks(HotelResponse hotelResponse, GetHotelsQuery? getHotelsQuery)
     {
         hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, CitiesController.GetCity, new { id = hotelResponse.CityId })!,
         "hotel-city",
@@ -278,6 +280,20 @@ public class HotelsController : Controller
         hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!, OwnersController.GetOwner, new { ownerId = hotelResponse.OwnerId })!,
         "hotel-owner",
         "GET"));
+
+        if(getHotelsQuery != null)
+        hotelResponse.Links.Add(new Link(_linkGenerator.GetPathByName(_httpContextAccessor.HttpContext!,
+            RoomInfosController.GetAllRoomInfoForHotel,
+            new
+            {
+                hotelId = hotelResponse.Id,
+                roomType = getHotelsQuery.RoomType,
+                minPrice = getHotelsQuery.MinPrice,
+                maxPrice = getHotelsQuery.MaxPrice
+            })!,
+            "hotel-rooms",
+            "GET")
+            );
     }
     /// <summary>
     /// Patch hotel by hotel's ID.

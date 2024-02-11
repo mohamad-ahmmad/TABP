@@ -33,6 +33,9 @@ public class GetHotelsQueryHandler : IQueryHandler<GetHotelsQuery, PagedList<Hot
             request.SearchTerm,
             request.SortCol,
             request.SortOrder,
+            request.NumberOfAdults,
+            request.NumberOfChildren,
+            request.NumberOfRooms,
             cancellationToken
             );
         (IEnumerable<Hotel> pagedHotels, int totalCount) = pagedHotelsAndTotalNumber;

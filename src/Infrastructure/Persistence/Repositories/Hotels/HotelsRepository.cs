@@ -58,7 +58,21 @@ public class HotelsRepository : IHotelsRepository
         IQueryable<Hotel> query = _dbContext.Hotels.Include(h => h.HotelType)
             .Where(h => h.IsDeleted == false);
         
-        if(minPrice != null)
+        if(minPrice != null && maxPrice != null)
+        {
+            query = query.Where(h => h.RoomInfos.Any(
+                ri => ri.Rooms.Any(r => r.PricePerDay >= minPrice && r.PricePerDay <= maxPrice)
+                )
+            );
+        }
+        else if(maxPrice != null)
+        {
+            query = query.Where(h => h.RoomInfos.Any(
+                ri => ri.Rooms.Any(r => r.PricePerDay <= maxPrice)
+                )
+            );
+        }
+        else if(minPrice != null)
         {
             query = query.Where(h => h.RoomInfos.Any(
                 ri => ri.Rooms.Any(r => r.PricePerDay >= minPrice)
@@ -66,13 +80,6 @@ public class HotelsRepository : IHotelsRepository
             );
         }
 
-        if(maxPrice != null)
-        {
-            query = query.Where(h => h.RoomInfos.Any(
-                ri => ri.Rooms.Any(r => r.PricePerDay <= maxPrice)
-                )
-            );
-        }
 
         if(hotelRating != null)
         {
@@ -88,7 +95,7 @@ public class HotelsRepository : IHotelsRepository
         {
             query = query.Where(h => h.HotelType!.Type == hotelType);
         }
-
+        
         if(amenities != null)
         {
             amenities = amenities.ToLower();

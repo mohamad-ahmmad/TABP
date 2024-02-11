@@ -118,7 +118,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.HotelsController.GetPagedHotels(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Double},System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32)">
+        <member name="M:API.Controllers.HotelsController.GetPagedHotels(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Double},System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Int32,System.Int32)">
             <summary>
             
             </summary>
@@ -133,6 +133,9 @@
             <param name="maxPrice"></param>
             <param name="minPrice"></param>
             <param name="roomType"></param>
+            <param name="numberOfAdults"></param>
+            <param name="numberOfChildren"></param>
+            <param name="numberOfRooms"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.HotelsController.PatchHotelById(System.Guid,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{Application.Hotels.Dtos.HotelDto})">
@@ -212,11 +215,14 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.Threading.CancellationToken)">
+        <member name="M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get all room-infos for a hotel.
             </summary>
             <param name="hotelId"></param>
+            <param name="maxPrice"></param>
+            <param name="minPrice"></param>
+            <param name="roomType"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
