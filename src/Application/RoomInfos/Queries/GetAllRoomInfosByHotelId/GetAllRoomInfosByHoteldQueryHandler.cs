@@ -19,7 +19,11 @@ public class GetAllRoomInfosByHoteldQueryHandler : IQueryHandler<GetAllRoomInfos
     }
     public async Task<Result<IEnumerable<RoomInfoDto>>> Handle(GetAllRoomInfosByHotelIdQuery request, CancellationToken cancellationToken)
     {
-        var roomInfos = await _roomInfosRepo.GetAllRoomInfosAsync(request.HotelId, cancellationToken);
+        var roomInfos = await _roomInfosRepo.GetAllRoomInfosAsync(request.HotelId,
+            request.RoomType,
+            request.MinPrice,
+            request.MaxPrice,
+            cancellationToken);
         var roomInfosDto = _mapper.Map<IEnumerable<RoomInfoDto>>(roomInfos);
 
         return Result<IEnumerable<RoomInfoDto>>.Success( roomInfosDto)!;

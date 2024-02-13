@@ -42,7 +42,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Amenities");
+                    b.ToTable("Amenities", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.City", b =>
@@ -90,7 +90,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
 
                     b.HasData(
                         new
@@ -198,7 +198,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Hotels");
+                    b.ToTable("Hotels", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.HotelType", b =>
@@ -228,7 +228,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelTypes");
+                    b.ToTable("HotelTypes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Owner", b =>
@@ -258,7 +258,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Owners");
+                    b.ToTable("Owners", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
@@ -296,7 +296,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("RoomInfoId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.RoomInfo", b =>
@@ -330,7 +330,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("RoomTypeId");
 
-                    b.ToTable("RoomInfos");
+                    b.ToTable("RoomInfos", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.RoomType", b =>
@@ -348,7 +348,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomTypes");
+                    b.ToTable("RoomTypes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -385,7 +385,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new

@@ -12,6 +12,7 @@ public class AmenitiesRepository : IAmenitiesRepository
     }
     public async Task AddAmenityAsync(Amenity amenity, CancellationToken cancellationToken)
     {
+        amenity.Description = amenity.Description.ToLower();
         await _dbContext.AddAsync(amenity, cancellationToken); 
     }
 }

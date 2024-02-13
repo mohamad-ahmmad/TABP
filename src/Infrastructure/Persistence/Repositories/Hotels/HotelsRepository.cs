@@ -35,16 +35,73 @@ public class HotelsRepository : IHotelsRepository
         return true;
     }
 
-    public async Task<(IEnumerable<Hotel>, int)> GetCitiesAndTotalCount(int page,
+    public async Task<(IEnumerable<Hotel>, int)> GetHotelsAndTotalCount(int page,
         int pageSize,
+        int? minPrice,
+        int? maxPrice,
+        double? hotelRating,
+        string? amenities,
+        string? hotelType,
+        string? roomType,
         string? searchTerm,
         string? sortCol,
         string? sortOrder,
+        int? numberOfAdults,
+        int? numberOfChildren,
+        int? numberOfRooms,
         CancellationToken cancellationToken)
     {
+        numberOfAdults ??= 2;
+        numberOfChildren ??= 0;
+        numberOfRooms ??= 1;
+        
         IQueryable<Hotel> query = _dbContext.Hotels.Include(h => h.HotelType)
             .Where(h => h.IsDeleted == false);
         
+        if(minPrice != null && maxPrice != null)
+        {
+            query = query.Where(h => h.RoomInfos.Any(
+                ri => ri.Rooms.Any(r => r.PricePerDay >= minPrice && r.PricePerDay <= maxPrice)
+                )
+            );
+        }
+        else if(maxPrice != null)
+        {
+            query = query.Where(h => h.RoomInfos.Any(
+                ri => ri.Rooms.Any(r => r.PricePerDay <= maxPrice)
+                )
+            );
+        }
+        else if(minPrice != null)
+        {
+            query = query.Where(h => h.RoomInfos.Any(
+                ri => ri.Rooms.Any(r => r.PricePerDay >= minPrice)
+                )
+            );
+        }
+
+
+        if(hotelRating != null)
+        {
+            query = query.Where(h => h.StarRatingAcc/h.NumberOfPeopleRated >=  hotelRating);
+        }
+
+        if(roomType != null)
+        {
+            query = query.Where(h => h.RoomInfos.Any(ri => ri.RoomType!.Name == roomType));
+        }
+
+        if(hotelType != null)
+        {
+            query = query.Where(h => h.HotelType!.Type == hotelType);
+        }
+        
+        if(amenities != null)
+        {
+            amenities = amenities.ToLower();
+            query = query.Where(h => h.Amenities.Any(a => amenities.Contains(a.Description)));
+        }
+
         if(searchTerm != null)
         {
             query = query.Where(h => h.HotelName.Contains(searchTerm) ||
@@ -62,7 +119,7 @@ public class HotelsRepository : IHotelsRepository
 
 
         var pagedHotels = await query.ToPagedListAsync(page, pageSize, cancellationToken);
-        var numberOfHotels = await query.CountAsync();
+        var numberOfHotels = await query.CountAsync(cancellationToken);
 
         return new(pagedHotels, numberOfHotels);
     }

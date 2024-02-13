@@ -8,6 +8,8 @@ public class RoomDtoProfile : Profile
     public RoomDtoProfile()
     {
         CreateMap<RoomForCreationDto, Room>();
-        CreateMap<Room, RoomDto?>();
+        CreateMap<Room, RoomDto>()
+            .ForMember(rd => rd.IsAdmin,
+            opt => opt.MapFrom<IsAdminPropertyResolver>());
     }
 }
