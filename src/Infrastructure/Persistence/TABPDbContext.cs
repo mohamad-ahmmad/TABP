@@ -56,7 +56,13 @@ public class TABPDbContext : DbContext
             .HasForeignKey(r => r.RoomInfoId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
-            
+
+        mb.Entity<Discount>()
+            .HasOne(d => d.Room)
+            .WithMany(r => r.Discounts)
+            .HasForeignKey(d => d.RoomId)
+            .OnDelete(DeleteBehavior.Cascade);
+
 
 
         SeedingUsers(mb);

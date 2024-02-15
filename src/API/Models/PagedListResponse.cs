@@ -1,4 +1,6 @@
 ﻿namespace API.Models;
+#pragma warning disable CS1591
+
 public class PagedListResponse<T>
 {
     public PagedListResponse(IEnumerable<T> data, int page, int pageSize, int totalCount)

@@ -7,4 +7,5 @@ public class Room : BaseSoftDeletableAuditableEntity
     public Guid? RoomInfoId { get; set; }
     public RoomInfo? RoomInfo { get; set; } = null!;
     public int PricePerDay { get; set; }
+    public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 }
