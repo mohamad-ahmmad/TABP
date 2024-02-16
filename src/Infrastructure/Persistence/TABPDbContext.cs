@@ -17,6 +17,7 @@ public class TABPDbContext : DbContext
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Amenity> Amenities { get; set; }
+    public DbSet<Discount> Discounts { get; set; }
     public TABPDbContext(DbContextOptions<TABPDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder mb)

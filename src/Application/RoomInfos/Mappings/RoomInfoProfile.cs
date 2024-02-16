@@ -7,7 +7,7 @@ public class RoomInfoProfile : Profile
 {
     public RoomInfoProfile()
     {
-        CreateMap<RoomInfoForCreateDto, RoomInfo>();   
+        CreateMap<RoomInfoForCreateDto, RoomInfo>();
         CreateMap<RoomInfo, RoomInfoDto>();
     }
 }

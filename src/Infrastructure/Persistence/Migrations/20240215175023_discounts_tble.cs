@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class discountstable : Migration
+    public partial class discountstble : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Discount",
+                name: "Discounts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -26,17 +26,19 @@ namespace Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Discount", x => x.Id);
+                    table.PrimaryKey("PK_Discounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Discount_Rooms_RoomId",
+                        name: "FK_Discounts_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+
             migrationBuilder.CreateIndex(
-                name: "IX_Discount_RoomId",
-                table: "Discount",
+                name: "IX_Discounts_RoomId",
+                table: "Discounts",
                 column: "RoomId");
         }
 
@@ -44,7 +46,7 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Discount");
+                name: "Discounts");
         }
     }
 }

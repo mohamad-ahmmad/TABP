@@ -7,6 +7,7 @@ public class RoomDto
     public string RoomNumber { get; set; } = string.Empty;
     public Guid RoomInfoId { get; set; }
     public int PricePerDay { get; set; }
+    public double DiscountPercentage { get; set; }
     public DateTime Created { get; set; }
     public Guid CreatedBy { get; set; }
     public DateTime LastModified { get; set; }

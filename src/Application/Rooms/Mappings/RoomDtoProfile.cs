@@ -10,6 +10,7 @@ public class RoomDtoProfile : Profile
         CreateMap<RoomForCreationDto, Room>();
         CreateMap<Room, RoomDto>()
             .ForMember(rd => rd.IsAdmin,
-            opt => opt.MapFrom<IsAdminPropertyResolver>());
+            opt => opt.MapFrom<IsAdminPropertyResolver>())
+            .ForMember(rd => rd.DiscountPercentage, opt => opt.MapFrom<DiscountPercentageResolver>());
     }
 }

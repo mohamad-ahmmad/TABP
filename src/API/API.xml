@@ -93,7 +93,7 @@
             
             </summary>
         </member>
-        <member name="M:API.Controllers.DiscountsController.#ctor(MediatR.ISender,AutoMapper.IMapper,RiskFirst.Hateoas.ILinksService)">
+        <member name="M:API.Controllers.DiscountsController.#ctor(MediatR.ISender,AutoMapper.IMapper)">
             <summary>
             
             </summary>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TABPDbContext))]
-    [Migration("20240215122341_discounts_table")]
-    partial class discountstable
+    [Migration("20240215175023_discounts_tble")]
+    partial class discountstble
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e5488832-baa8-4d10-bf7f-9f9a480e5a51"),
+                            Id = new Guid("1e54cae6-8aec-4c8e-87d6-f10104864b00"),
                             CityName = "Japan",
                             CountryName = "Tokyo",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -113,7 +113,7 @@ namespace Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3d64f64f-6992-49e6-a4b6-4f62e4a7629f"),
+                            Id = new Guid("4748ec3f-4255-43ed-ac11-866061e69f77"),
                             CityName = "Moscow",
                             CountryName = "Russia",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -153,7 +153,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Discount");
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Hotel", b =>
