@@ -88,6 +88,27 @@
             <response code="404">City not found</response>
             <response code="400">Bad request</response>
         </member>
+        <member name="T:API.Controllers.DiscountsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:API.Controllers.DiscountsController.#ctor(MediatR.ISender,AutoMapper.IMapper)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:API.Controllers.DiscountsController.AddDiscount(API.Models.DiscountRequest,System.Guid,System.Guid,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Create discount for a room
+            </summary>
+            <param name="discountReq"></param>
+            <param name="roomId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.HotelsController">
             <summary>
             Hotel endpoints
@@ -289,6 +310,21 @@
             <returns>ActionResult</returns>
             <response code="200">Return the added user data.</response>
             <response code="400">List of errors.</response>
+        </member>
+        <member name="P:API.Models.DiscountRequest.DiscountPercentage">
+            <summary>
+            Percentage like: 50, 20.5 this equals to 50%, 20.5%
+            </summary>
+        </member>
+        <member name="P:API.Models.DiscountRequest.FromDate">
+            <summary>
+            The date of discount will start (UTC)
+            </summary>
+        </member>
+        <member name="P:API.Models.DiscountRequest.ToDate">
+            <summary>
+            The date of discount will end (UTC)
+            </summary>
         </member>
     </members>
 </doc>

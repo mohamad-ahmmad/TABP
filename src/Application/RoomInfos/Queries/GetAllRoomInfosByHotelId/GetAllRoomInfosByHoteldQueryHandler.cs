@@ -25,7 +25,7 @@ public class GetAllRoomInfosByHoteldQueryHandler : IQueryHandler<GetAllRoomInfos
             request.MaxPrice,
             cancellationToken);
         var roomInfosDto = _mapper.Map<IEnumerable<RoomInfoDto>>(roomInfos);
-
+        
         return Result<IEnumerable<RoomInfoDto>>.Success( roomInfosDto)!;
     }
 }

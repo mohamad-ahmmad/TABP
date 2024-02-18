@@ -8,7 +8,15 @@ using FluentValidation;
 using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
+using Infrastructure.Persistence.Repositories.Amenities;
 using Infrastructure.Persistence.Repositories.Cities;
+using Infrastructure.Persistence.Repositories.Discounts;
+using Infrastructure.Persistence.Repositories.Hotels;
+using Infrastructure.Persistence.Repositories.HotelTypes;
+using Infrastructure.Persistence.Repositories.Owners;
+using Infrastructure.Persistence.Repositories.RoomInfos;
+using Infrastructure.Persistence.Repositories.Rooms;
+using Infrastructure.Persistence.Repositories.RoomTypes;
 using Infrastructure.Persistence.Repositories.Users;
 using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Security;
@@ -20,22 +28,11 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using Infrastructure.Persistence.Repositories.Owners;
-using Domain.Errors;
-using Infrastructure.Persistence.Repositories.HotelTypes;
-using Infrastructure.Persistence.Repositories.Hotels;
-using System.Text.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Domain.Entities;
-using Infrastructure.Persistence.Repositories.RoomTypes;
-using Infrastructure.Persistence.Repositories.RoomInfos;
-using Infrastructure.Persistence.Repositories.Rooms;
-using Infrastructure.Persistence.Repositories.Amenities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,8 +47,8 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("JWTToken", new()
     {
         Type = SecuritySchemeType.Http,
-        Scheme="Bearer",
-        Description="Input a valid token to access this API"
+        Scheme = "Bearer",
+        Description = "Input a valid token to access this API"
     });
 
 
@@ -131,6 +128,7 @@ builder.Services.AddScoped<IRoomTypesRepository, RoomTypesRepository>();
 builder.Services.AddScoped<IRoomInfosRepository, RoomInfosRepository>();
 builder.Services.AddScoped<IRoomsRepository, RoomsRepository>();
 builder.Services.AddScoped<IAmenitiesRepository, AmenitiesRepository>();
+builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings

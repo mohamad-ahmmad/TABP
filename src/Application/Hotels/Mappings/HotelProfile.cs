@@ -8,7 +8,8 @@ public class HotelProfile : Profile
     public HotelProfile()
     {
         CreateMap<HotelForCreateDto, Hotel>();
-        CreateMap<Hotel, HotelDto>();
+        CreateMap<Hotel, HotelDto>()
+            .ForMember(hDto => hDto.DiscountPercentage, opt => opt.MapFrom<HotelDiscountPercentageResolver>());
         CreateMap<HotelDto, Hotel>();
     }
 }

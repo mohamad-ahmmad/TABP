@@ -1,5 +1,6 @@
 ﻿using Application.HotelTypes.Dtos;
 using Domain.Entities;
+using System.Diagnostics.Contracts;
 
 namespace Application.Hotels.Dtos;
 public class HotelDto
@@ -17,6 +18,7 @@ public class HotelDto
     public string PostalCode { get; set; } = string.Empty;
     public double Longitude { get; set; }
     public double Latitude { get; set; }
+    public double? DiscountPercentage { get; set; } = null!;
     public Guid? OwnerId { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? Created { get; set; }

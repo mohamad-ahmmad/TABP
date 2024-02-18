@@ -17,6 +17,7 @@ public class TABPDbContext : DbContext
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Amenity> Amenities { get; set; }
+    public DbSet<Discount> Discounts { get; set; }
     public TABPDbContext(DbContextOptions<TABPDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder mb)
@@ -56,7 +57,13 @@ public class TABPDbContext : DbContext
             .HasForeignKey(r => r.RoomInfoId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
-            
+
+        mb.Entity<Discount>()
+            .HasOne(d => d.Room)
+            .WithMany(r => r.Discounts)
+            .HasForeignKey(d => d.RoomId)
+            .OnDelete(DeleteBehavior.Cascade);
+
 
 
         SeedingUsers(mb);
