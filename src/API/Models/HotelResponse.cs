@@ -17,6 +17,10 @@ public class HotelResponse
     public string PostalCode { get; set; } = string.Empty;
     public double Longitude { get; set; }
     public double Latitude { get; set; }
+    /// <summary>
+    /// Appear when choosing sortCol is descountPercentage
+    /// </summary>
+    public double? DiscountPercentage { get; set; } = null!;
     public Guid? OwnerId { get; set; }
     public Guid? CityId { get; set; }
     public bool IsDeleted { get; set; }
