@@ -18,6 +18,7 @@ public class TABPDbContext : DbContext
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Amenity> Amenities { get; set; }
     public DbSet<Discount> Discounts { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
     public TABPDbContext(DbContextOptions<TABPDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder mb)
@@ -65,6 +66,18 @@ public class TABPDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
 
+        mb.Entity<User>()
+            .HasMany(u => u.CartItems)
+            .WithOne(ci => ci.User)
+            .HasForeignKey(ci => ci.UserId)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        mb.Entity<Room>()
+            .HasMany(r => r.CartItems)
+            .WithOne(ci => ci.Room)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Cascade);
 
         SeedingUsers(mb);
         SeedingCities(mb);

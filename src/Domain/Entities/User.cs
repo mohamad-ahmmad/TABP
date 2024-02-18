@@ -11,5 +11,6 @@ namespace Domain.Entities
         public string Firstname { get; set; } = string.Empty;
         public string Lastname { get; set; } = string.Empty;
         public UserLevels UserLevel { get; set; } = UserLevels.User;
+        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
 }
