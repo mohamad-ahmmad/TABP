@@ -41,9 +41,9 @@ public class AddCartItemCommandHandler : ICommandHandler<AddCartItemCommand, Car
         await _cartItemsRepo.AddCartItemAsync(itemCart, cancellationToken);
 
         await _unitOfWork.CommitAsync(cancellationToken);
-
+        
         var itemCartDto = _mapper.Map<CartItemDto>(itemCart);
-
+        
         return Result<CartItemDto>.Success(itemCartDto)!;
     }
 }

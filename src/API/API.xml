@@ -326,5 +326,10 @@
             The date of discount will end (UTC)
             </summary>
         </member>
+        <member name="P:API.Models.HotelResponse.DiscountPercentage">
+            <summary>
+            Appear when choosing sortCol is descountPercentage
+            </summary>
+        </member>
     </members>
 </doc>

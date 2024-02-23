@@ -9,6 +9,7 @@ using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Repositories.Amenities;
+using Infrastructure.Persistence.Repositories.CartItems;
 using Infrastructure.Persistence.Repositories.Cities;
 using Infrastructure.Persistence.Repositories.Discounts;
 using Infrastructure.Persistence.Repositories.Hotels;
@@ -129,6 +130,7 @@ builder.Services.AddScoped<IRoomInfosRepository, RoomInfosRepository>();
 builder.Services.AddScoped<IRoomsRepository, RoomsRepository>();
 builder.Services.AddScoped<IAmenitiesRepository, AmenitiesRepository>();
 builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
+builder.Services.AddScoped<ICartItemsRepository, CartItemsRepository>();
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings

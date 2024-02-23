@@ -9,6 +9,5 @@ public class CartItem : BaseEntity
     public Room Room { get; set; } = new Room();
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
-    public double Price { get; set; }
 }
 

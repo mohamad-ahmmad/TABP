@@ -7,4 +7,5 @@ public class CartItemDto
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
     public double Price { get; set; }
+    public double DiscountPercentage { get; set; }
 }
