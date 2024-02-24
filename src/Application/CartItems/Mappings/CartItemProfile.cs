@@ -7,9 +7,9 @@ public class CartItemProfile : Profile
 {
     public CartItemProfile()
     {
-        CreateMap<CartItemForCreationDto,  CartItemForCreationDto>();
+        CreateMap<CartItemForCreationDto,  CartItem>();
         CreateMap<CartItem, CartItemDto>()
-            .ForMember(cid => cid.Price, opt => opt.MapFrom<PriceResolver>())
+            .ForMember(cid => cid.PricePerDay, opt => opt.MapFrom<PriceResolver>())
             .ForMember(cid => cid.DiscountPercentage, opt => opt.MapFrom<DiscountPercentageResolver>());
     }
 }

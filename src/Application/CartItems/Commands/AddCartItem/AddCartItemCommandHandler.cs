@@ -35,10 +35,14 @@ public class AddCartItemCommandHandler : ICommandHandler<AddCartItemCommand, Car
             return Result<CartItemDto>.Failure(CartItemErrors.ForbidToCreateCartItem,
                 HttpStatusCode.Forbidden);
         }
-
+        
         var itemCart = _mapper.Map<CartItem>(request.CartItemDto);
-
-        await _cartItemsRepo.AddCartItemAsync(itemCart, cancellationToken);
+        
+        var result = await _cartItemsRepo.AddCartItemAsync(itemCart, cancellationToken);
+        if(result.IsFailure)
+        {
+            return Result<CartItemDto>.Failure(result.Errors.First(), HttpStatusCode.NotFound);
+        }
 
         await _unitOfWork.CommitAsync(cancellationToken);
         

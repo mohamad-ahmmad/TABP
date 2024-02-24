@@ -28,6 +28,17 @@
             <response code="400">List of errors.</response>
             <returns>Token</returns>
         </member>
+        <member name="M:API.Controllers.CartItemsController.AddCartItem(System.Guid,API.Models.CartItemRequest,System.Threading.CancellationToken)">
+            <summary>
+            Add item to the user's cart.
+            </summary>
+            <param name="userId"></param>
+            <param name="cartItem"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <response code="404">The room not found.</response>
+            <response code="201">Added successfully.</response>
+        </member>
         <member name="M:API.Controllers.CitiesController.CreateCity(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
             <summary>
             Create a city.
@@ -310,6 +321,21 @@
             <returns>ActionResult</returns>
             <response code="200">Return the added user data.</response>
             <response code="400">List of errors.</response>
+        </member>
+        <member name="P:API.Models.CartItemRequest.RoomId">
+            <summary>
+            Room id to add to cart
+            </summary>
+        </member>
+        <member name="P:API.Models.CartItemRequest.FromDate">
+            <summary>
+            Start date of reservation
+            </summary>
+        </member>
+        <member name="P:API.Models.CartItemRequest.ToDate">
+            <summary>
+            End date of reservation
+            </summary>
         </member>
         <member name="P:API.Models.DiscountRequest.DiscountPercentage">
             <summary>

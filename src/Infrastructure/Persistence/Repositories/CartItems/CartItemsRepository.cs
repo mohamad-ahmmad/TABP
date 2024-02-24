@@ -20,7 +20,6 @@ public class CartItemsRepository : ICartItemsRepository
     }
     public async Task<Result<Empty>> AddCartItemAsync(CartItem cartItem, CancellationToken cancellationToken)
     {
-        await _dbContext.AddAsync(cartItem, cancellationToken);
         var roomAndDiscount = await (from r in _dbContext.Rooms
                                      join d in _dbContext.Discounts.Where(d => d.FromDate.CompareTo(_dateTimeProvider.GetUtcNow()) <= 0
                                      && d.ToDate.CompareTo(_dateTimeProvider.GetUtcNow()) >= 0)
@@ -32,14 +31,20 @@ public class CartItemsRepository : ICartItemsRepository
                                          Room = r,
                                          Discount = d
                                      }).FirstOrDefaultAsync(cancellationToken);
-
-        if(roomAndDiscount == null)
+        if (roomAndDiscount == null)
         {
             return Result<Empty>.Failure(RoomErrors.NotFoundRoom, HttpStatusCode.NotFound);
         }
-
         cartItem.Room = roomAndDiscount.Room;
-        cartItem.Room.Discounts.Add(roomAndDiscount.Discount);
+        
+        if(roomAndDiscount.Discount != null)
+        {
+            cartItem.Room.Discounts.Add(roomAndDiscount.Discount);
+        }
+        await _dbContext.AddAsync(cartItem, cancellationToken);
+        
+    
+
         return Result<Empty>.Success(HttpStatusCode.Created)!;
     }
 }
