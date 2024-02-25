@@ -5,6 +5,7 @@ using Domain.Repositories;
 using Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Runtime.CompilerServices;
 
 namespace Infrastructure.Persistence.Repositories.CartItems;
 public class CartItemsRepository : ICartItemsRepository
@@ -46,5 +47,15 @@ public class CartItemsRepository : ICartItemsRepository
     
 
         return Result<Empty>.Success(HttpStatusCode.Created)!;
+    }
+
+    public async Task<IEnumerable<CartItem>> GetCartItemsByUserIdAsync(Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var cartItems = await _dbContext.CartItems
+            .Where(ci => ci.UserId == userId)
+            .ToListAsync(cancellationToken);
+
+        return cartItems;
     }
 }
