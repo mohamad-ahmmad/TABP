@@ -33,6 +33,9 @@ public class CartItemNavigationLinksResolver : IValueResolver<CartItemDto, CartI
         var addCartItemRel = CartItemsController.addCartItem == currentEndpointName ?
             "self" : CartItemsController.addCartItem;
 
+        var getCartItemsRel = CartItemsController.getCartItems == currentEndpointName ?
+            "self" : CartItemsController.getCartItems;
+
 
         return new List<Link>
         {
@@ -40,6 +43,12 @@ public class CartItemNavigationLinksResolver : IValueResolver<CartItemDto, CartI
             ( _linkGenerator.GetPathByName(CartItemsController.addCartItem, new { userId = source.UserId })!,
                 addCartItemRel,
                 "POST"
+            ),
+            new
+            (
+            _linkGenerator.GetPathByName(CartItemsController.getCartItems, new { userId = source.UserId })!,
+            getCartItemsRel,
+            "GET"
             )
         };
     }

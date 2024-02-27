@@ -41,7 +41,7 @@
         </member>
         <member name="M:API.Controllers.CartItemsController.GetAllCartItemResponsesByUserId(System.Guid,System.Threading.CancellationToken)">
             <summary>
-            
+            Get all cart items for a user by user id
             </summary>
             <param name="userId"></param>
             <param name="cancellationToken"></param>
@@ -255,17 +255,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <summary>
-            Get all room-infos for a hotel.
-            </summary>
-            <param name="hotelId"></param>
-            <param name="maxPrice"></param>
-            <param name="minPrice"></param>
-            <param name="roomType"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)" -->
         <member name="M:API.Controllers.RoomInfosController.DeleteRoomInfoById(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Delete room info by id.

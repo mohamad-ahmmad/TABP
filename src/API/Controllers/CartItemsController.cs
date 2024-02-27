@@ -14,7 +14,8 @@ public class CartItemsController : Controller
 {
     private readonly ISender _sender;
     private readonly IMapper _mapper;
-    public const string addCartItem = "AddCartItem";
+    public const string addCartItem = "add-cart-item";
+    public const string getCartItems = "get-cart-items";
 
     public CartItemsController(ISender sender,
         IMapper mapper)
@@ -57,13 +58,17 @@ public class CartItemsController : Controller
         return CreatedAtRoute(new { userId }, _mapper.Map<CartItemResponse>(result.Response));
     }
     /// <summary>
-    /// 
+    /// Get all cart items for a user by user id
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
     [Authorize]
+    [EndpointName(getCartItems)]
+    [ProducesResponseType(typeof(IEnumerable<CartItemResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<CartItemResponse>>> GetAllCartItemResponsesByUserId(Guid userId,
         CancellationToken cancellationToken)
     {

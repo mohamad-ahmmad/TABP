@@ -62,7 +62,7 @@ public class RoomInfosController : Controller
     }
 
     /// <summary>
-    /// Get all room-infos for a hotel.
+    /// Get all room-infos & rooms for a hotel.
     /// </summary>
     /// <param name="hotelId"></param>
     /// <param name="maxPrice"></param>
