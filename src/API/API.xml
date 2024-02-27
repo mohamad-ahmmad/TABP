@@ -39,6 +39,14 @@
             <response code="404">The room not found.</response>
             <response code="201">Added successfully.</response>
         </member>
+        <member name="M:API.Controllers.CartItemsController.GetAllCartItemResponsesByUserId(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            
+            </summary>
+            <param name="userId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.CitiesController.CreateCity(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
             <summary>
             Create a city.

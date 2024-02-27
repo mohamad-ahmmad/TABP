@@ -52,9 +52,32 @@ public class CartItemsRepository : ICartItemsRepository
     public async Task<IEnumerable<CartItem>> GetCartItemsByUserIdAsync(Guid userId,
         CancellationToken cancellationToken)
     {
-        var cartItems = await _dbContext.CartItems
-            .Where(ci => ci.UserId == userId)
-            .ToListAsync(cancellationToken);
+        var cartItemsAndRoomAndDiscount = await (from ci in _dbContext.CartItems.Where(ci => ci.UserId == userId)
+                                   join r in _dbContext.Rooms on ci.RoomId equals r.Id
+                                   join d in _dbContext.Discounts.Where(d => d.FromDate.CompareTo(_dateTimeProvider.GetUtcNow()) <= 0
+                                   && d.ToDate.CompareTo(_dateTimeProvider.GetUtcNow()) >= 0)
+                                   on r.Id equals d.RoomId into rd
+                                   from d in rd.DefaultIfEmpty()
+                                   select new
+                                   {
+                                       CartItem = ci,
+                                       Room = r,
+                                       Discount = d
+                                   }).ToListAsync(cancellationToken);
+
+        var cartItems = cartItemsAndRoomAndDiscount
+                           .Select(crd =>
+                           {
+                               var c = crd.CartItem;
+                               c.Room = crd.Room;
+                               if(crd.Discount != null)
+                               {
+                                   c.Room.Discounts.Add(crd.Discount);
+                               }
+                               
+                               return c;
+                           })
+                           .ToList();
 
         return cartItems;
     }

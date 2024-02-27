@@ -1,6 +1,7 @@
 ﻿using API.Models;
 using Application.CartItems.Commands.AddCartItem;
 using Application.CartItems.Dtos;
+using Application.CartItems.Queries.GetCartItemsByUserId;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -55,5 +56,27 @@ public class CartItemsController : Controller
 
         return CreatedAtRoute(new { userId }, _mapper.Map<CartItemResponse>(result.Response));
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult<IEnumerable<CartItemResponse>>> GetAllCartItemResponsesByUserId(Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var getCartItemsByUserIdQuery = new GetCartItemsByUserIdQuery(userId);
 
+        var result = await _sender.Send(getCartItemsByUserIdQuery, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors });
+        }
+
+        return Ok(_mapper.Map<IEnumerable<CartItemResponse>>(result.Response));
+    }
+    
 }
