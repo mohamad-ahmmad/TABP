@@ -81,4 +81,22 @@ public class CartItemsRepository : ICartItemsRepository
 
         return cartItems;
     }
+
+    public async Task<Result<Empty>> DeleteCartItemByIdAsync(Guid userId,
+        Guid cartItemId,
+        CancellationToken cancellationToken)
+    {
+        var cartItem = await _dbContext.CartItems
+            .Where(ci => ci.UserId == userId)
+            .FirstOrDefaultAsync(ci => ci.Id == cartItemId, cancellationToken);
+
+        if(cartItem == null)
+        {
+            return Result<Empty>.Failure(CartItemErrors.NotFoundCartItem, HttpStatusCode.NotFound);
+        }
+
+        _dbContext.Remove(cartItem);
+
+        return Result<Empty>.Success(HttpStatusCode.NoContent)!;
+    }
 }

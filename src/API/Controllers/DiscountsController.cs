@@ -55,7 +55,7 @@ public class DiscountsController : Controller
     {
         discountReq.ToDate = discountReq.ToDate.Date;
         discountReq.FromDate = discountReq.FromDate.Date;
-
+        
         var discountDto = _mapper.Map<DiscountDto>(discountReq);
         discountDto.RoomId = roomId;
 

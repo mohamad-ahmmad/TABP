@@ -47,6 +47,15 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.CartItemsController.DeleteCartItemById(System.Guid,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete cart item by id
+            </summary>
+            <param name="userId"></param>
+            <param name="cartItemId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.CitiesController.CreateCity(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
             <summary>
             Create a city.

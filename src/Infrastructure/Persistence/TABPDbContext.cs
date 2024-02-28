@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Common;
+using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
@@ -82,7 +83,7 @@ public class TABPDbContext : DbContext
         SeedingUsers(mb);
         SeedingCities(mb);
     }
-
+    
     private void SeedingCities(ModelBuilder mb)
     {
         mb.Entity<City>().HasData

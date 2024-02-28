@@ -65,7 +65,7 @@ public class HotelsRepository : IHotelsRepository
 
         IQueryable<Hotel> query = _dbContext.Hotels.Include(h => h.HotelType)
             .Where(h => h.IsDeleted == false);
-
+        
         //TODO : SEARCH USING THE DISCOUNTED PRICE 
         //r.Discounts.Where(Perdicate).Select(d => d.DiscountPercentage).Take(1).FirstOrDefault()
 
@@ -102,7 +102,7 @@ public class HotelsRepository : IHotelsRepository
         {
             query = query.Where(h => h.RoomInfos.Any(ri => ri.RoomType!.Name == roomType));
         }
-
+        
         if (hotelType != null)
         {
             query = query.Where(h => h.HotelType!.Type == hotelType);

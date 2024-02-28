@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using Application.CartItems.Commands.AddCartItem;
+using Application.CartItems.Commands.DeleteCartItemById;
 using Application.CartItems.Dtos;
 using Application.CartItems.Queries.GetCartItemsByUserId;
 using AutoMapper;
@@ -16,6 +17,7 @@ public class CartItemsController : Controller
     private readonly IMapper _mapper;
     public const string addCartItem = "add-cart-item";
     public const string getCartItems = "get-cart-items";
+    public const string deleteCartItemById = "delete-cart-item-by-id";
 
     public CartItemsController(ISender sender,
         IMapper mapper)
@@ -83,5 +85,36 @@ public class CartItemsController : Controller
 
         return Ok(_mapper.Map<IEnumerable<CartItemResponse>>(result.Response));
     }
-    
+
+
+    /// <summary>
+    /// Delete cart item by id
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="cartItemId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpDelete("{cartItemId}")]
+    [Authorize]
+    [EndpointName(deleteCartItemById)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorsList), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+
+    public async Task<ActionResult> DeleteCartItemById(Guid userId,
+        Guid cartItemId,
+        CancellationToken cancellationToken)
+    {
+        var deleteCartItemCommand = new DeleteCartItemByIdCommand(userId, cartItemId);
+        var result = await _sender.Send(deleteCartItemCommand, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return StatusCode((int)result.StatusCode, new ErrorsList { Errors = result.Errors});
+        }
+
+        return NoContent();
+    }
+
 }

@@ -36,20 +36,27 @@ public class CartItemNavigationLinksResolver : IValueResolver<CartItemDto, CartI
         var getCartItemsRel = CartItemsController.getCartItems == currentEndpointName ?
             "self" : CartItemsController.getCartItems;
 
-
+        
         return new List<Link>
         {
             new
             ( _linkGenerator.GetPathByName(CartItemsController.addCartItem, new { userId = source.UserId })!,
                 addCartItemRel,
-                "POST"
+                HttpMethod.Post.ToString()
             ),
             new
             (
-            _linkGenerator.GetPathByName(CartItemsController.getCartItems, new { userId = source.UserId })!,
-            getCartItemsRel,
-            "GET"
+                _linkGenerator.GetPathByName(CartItemsController.getCartItems, new { userId = source.UserId })!,
+                getCartItemsRel,
+                HttpMethod.Post.ToString()
+            ),
+            new
+            (
+                _linkGenerator.GetPathByName(CartItemsController.deleteCartItemById, new {userId =  source.UserId,  cartItemId = source.Id})!,
+                CartItemsController.deleteCartItemById,
+                HttpMethod.Delete.ToString()
             )
+            
         };
     }
 }
