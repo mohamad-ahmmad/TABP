@@ -16,12 +16,12 @@ public class CreateDiscountCommandValidator : AbstractValidator<CreateDiscountCo
 
         RuleFor(c => c.DiscountDto.FromDate)
             .NotEmpty()
-            .Must(df => df.CompareTo(utcNow) > 0 )
+            .Must(df => df.CompareTo(utcNow.Date) >= 0 )
             .WithMessage("Invalid FromDate field");
 
         RuleFor(c => c.DiscountDto.ToDate)
             .NotEmpty()
-            .Must(dt => dt.CompareTo(utcNow) > 0)
+            .Must(dt => dt.CompareTo(utcNow.Date) >= 0)
             .WithMessage("Invalid ToDate field");
 
         RuleFor(c => c.DiscountDto)

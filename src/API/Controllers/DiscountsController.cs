@@ -5,6 +5,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Controllers;
 
@@ -52,6 +53,9 @@ public class DiscountsController : Controller
         Guid roomInfoId,
         CancellationToken cancellationToken) 
     {
+        discountReq.ToDate = discountReq.ToDate.Date;
+        discountReq.FromDate = discountReq.FromDate.Date;
+        
         var discountDto = _mapper.Map<DiscountDto>(discountReq);
         discountDto.RoomId = roomId;
 

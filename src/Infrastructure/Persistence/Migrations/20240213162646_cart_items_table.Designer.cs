@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TABPDbContext))]
-    partial class TABPDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240213162646_cart_items_table")]
+    partial class cartitemstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,6 +57,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
@@ -69,7 +75,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("Domain.Entities.City", b =>
@@ -122,7 +128,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0e8edeef-442f-43a6-a12d-a52c4ac3278b"),
+                            Id = new Guid("7e83c695-bd80-4793-9300-0e14adb5852b"),
                             CityName = "Japan",
                             CountryName = "Tokyo",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -137,7 +143,7 @@ namespace Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8abe8a5e-f640-44c0-a33f-165bfb0a2cf4"),
+                            Id = new Guid("769060df-107b-43db-9c38-2d66c93efdc0"),
                             CityName = "Moscow",
                             CountryName = "Russia",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -150,34 +156,6 @@ namespace Infrastructure.Persistence.Migrations
                             PostOfficePostalCode = "X32Z",
                             ThumbnailUrl = "2.jpg"
                         });
-                });
-
-            modelBuilder.Entity("Domain.Entities.Discount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("DiscountPercentage")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Hotel", b =>
@@ -496,16 +474,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Discount", b =>
-                {
-                    b.HasOne("Domain.Entities.Room", "Room")
-                        .WithMany("Discounts")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Room");
-                });
-
             modelBuilder.Entity("Domain.Entities.Hotel", b =>
                 {
                     b.HasOne("Domain.Entities.City", "City")
@@ -576,8 +544,6 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Room", b =>
                 {
                     b.Navigation("CartItems");
-
-                    b.Navigation("Discounts");
                 });
 
             modelBuilder.Entity("Domain.Entities.RoomInfo", b =>

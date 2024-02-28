@@ -65,7 +65,7 @@ public class HotelsRepository : IHotelsRepository
 
         IQueryable<Hotel> query = _dbContext.Hotels.Include(h => h.HotelType)
             .Where(h => h.IsDeleted == false);
-
+        
         //TODO : SEARCH USING THE DISCOUNTED PRICE 
         //r.Discounts.Where(Perdicate).Select(d => d.DiscountPercentage).Take(1).FirstOrDefault()
 
@@ -102,7 +102,7 @@ public class HotelsRepository : IHotelsRepository
         {
             query = query.Where(h => h.RoomInfos.Any(ri => ri.RoomType!.Name == roomType));
         }
-
+        
         if (hotelType != null)
         {
             query = query.Where(h => h.HotelType!.Type == hotelType);
@@ -130,7 +130,7 @@ public class HotelsRepository : IHotelsRepository
         }
 
         List<HotelAndDiscount> pagedHotels;
-
+        
         if (sortCol == "discountpercentage")
             pagedHotels = await (from hotel in query
                                  join roomInfo in _dbContext.RoomInfos on hotel.Id equals roomInfo.HotelId
@@ -147,7 +147,7 @@ public class HotelsRepository : IHotelsRepository
                                      }
                                  })
                 .ToPagedListAsync(page, pageSize, cancellationToken);
-
+        
         else
             pagedHotels = await query.Select(h => new HotelAndDiscount
             {
@@ -174,7 +174,7 @@ public class HotelsRepository : IHotelsRepository
         
         return new(hotels, numberOfHotels);
     }
-
+    
     private Expression<Func<Hotel, object>> GetSortProperty(string? sortCol)
     {
         

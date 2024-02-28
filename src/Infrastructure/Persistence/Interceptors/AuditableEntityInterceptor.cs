@@ -37,7 +37,9 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
         if (dbContext == null)
             return;
 
-        foreach (var entry in dbContext.ChangeTracker.Entries<BaseSoftDeletableAuditableEntity>())
+ 
+        foreach (var entry in dbContext.ChangeTracker
+            .Entries<BaseSoftDeletableAuditableEntity>())
         {
             var id = entry.Entity.Id;
             var type = entry.Entity.GetType();

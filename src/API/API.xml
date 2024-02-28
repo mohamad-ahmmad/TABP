@@ -28,6 +28,34 @@
             <response code="400">List of errors.</response>
             <returns>Token</returns>
         </member>
+        <member name="M:API.Controllers.CartItemsController.AddCartItem(System.Guid,API.Models.CartItemRequest,System.Threading.CancellationToken)">
+            <summary>
+            Add item to the user's cart.
+            </summary>
+            <param name="userId"></param>
+            <param name="cartItem"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <response code="404">The room not found.</response>
+            <response code="201">Added successfully.</response>
+        </member>
+        <member name="M:API.Controllers.CartItemsController.GetAllCartItemResponsesByUserId(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Get all cart items for a user by user id
+            </summary>
+            <param name="userId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.CartItemsController.DeleteCartItemById(System.Guid,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Delete cart item by id
+            </summary>
+            <param name="userId"></param>
+            <param name="cartItemId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.CitiesController.CreateCity(System.String,Microsoft.AspNetCore.Http.IFormFile,System.Threading.CancellationToken)">
             <summary>
             Create a city.
@@ -236,17 +264,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <summary>
-            Get all room-infos for a hotel.
-            </summary>
-            <param name="hotelId"></param>
-            <param name="maxPrice"></param>
-            <param name="minPrice"></param>
-            <param name="roomType"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:API.Controllers.RoomInfosController.GetRoomInfosForHotel(System.Guid,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)" -->
         <member name="M:API.Controllers.RoomInfosController.DeleteRoomInfoById(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Delete room info by id.
@@ -311,6 +329,21 @@
             <response code="200">Return the added user data.</response>
             <response code="400">List of errors.</response>
         </member>
+        <member name="P:API.Models.CartItemRequest.RoomId">
+            <summary>
+            Room id to add to cart
+            </summary>
+        </member>
+        <member name="P:API.Models.CartItemRequest.FromDate">
+            <summary>
+            Start date of reservation
+            </summary>
+        </member>
+        <member name="P:API.Models.CartItemRequest.ToDate">
+            <summary>
+            End date of reservation
+            </summary>
+        </member>
         <member name="P:API.Models.DiscountRequest.DiscountPercentage">
             <summary>
             Percentage like: 50, 20.5 this equals to 50%, 20.5%
@@ -324,6 +357,11 @@
         <member name="P:API.Models.DiscountRequest.ToDate">
             <summary>
             The date of discount will end (UTC)
+            </summary>
+        </member>
+        <member name="P:API.Models.HotelResponse.DiscountPercentage">
+            <summary>
+            Appear when choosing sortCol is descountPercentage
             </summary>
         </member>
     </members>
