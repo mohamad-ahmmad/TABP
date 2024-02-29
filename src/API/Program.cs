@@ -3,6 +3,7 @@ using Application;
 using Application.Abstractions;
 using Application.Behaviors.Caching;
 using Application.Behaviors.Validation;
+using Domain.Entities;
 using Domain.Repositories;
 using FluentValidation;
 using Infrastructure.Caching;
@@ -21,11 +22,13 @@ using Infrastructure.Persistence.Repositories.RoomTypes;
 using Infrastructure.Persistence.Repositories.Users;
 using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Security;
+using Infrastructure.Security.Identity;
 using Infrastructure.Services.ImagesUploaders;
 using Infrastructure.Services.TimeProviders;
 using Infrastructure.Services.Uploaders;
 using MediatR;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -112,7 +115,7 @@ builder.Services.AddDbContext<TABPDbContext>((sp, config) =>
 });
 builder.Services.AddScoped<AuditableEntityInterceptor>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+//builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IImageUploaderService>(provider =>
 {
     var uploader = new InServerImageUploaderService();
@@ -131,6 +134,11 @@ builder.Services.AddScoped<IRoomsRepository, RoomsRepository>();
 builder.Services.AddScoped<IAmenitiesRepository, AmenitiesRepository>();
 builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
 builder.Services.AddScoped<ICartItemsRepository, CartItemsRepository>();
+
+builder.Services.AddIdentityCore<ApplicationUser>()
+    .AddEntityFrameworkStores<TABPDbContext>()
+    .AddApiEndpoints();
+
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings
@@ -163,6 +171,8 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+
+app.MapIdentityApi<ApplicationUser>();
 
 app.UseStaticFiles();
 

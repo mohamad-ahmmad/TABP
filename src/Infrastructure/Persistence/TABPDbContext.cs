@@ -1,15 +1,17 @@
 ﻿using Domain.Common;
 using Domain.Entities;
 using Domain.Enums;
+using Infrastructure.Security.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
 namespace Infrastructure.Persistence;
 
-public class TABPDbContext : DbContext
+public class TABPDbContext : IdentityDbContext<ApplicationUser>
 {
 
-    public DbSet<User> Users { get; set; }
+    //public DbSet<User> Users { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Hotel> Hotels { get; set; }
     public DbSet<HotelType> HotelTypes { get; set; }
