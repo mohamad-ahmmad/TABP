@@ -32,6 +32,9 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using Square;
+using Square.Apis;
+using System.Data.SqlTypes;
 using System.Reflection;
 using System.Text;
 
@@ -71,6 +74,16 @@ builder.Services.AddSingleton<IImageExtensionValidator, ImageExtensionValidator>
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ICacheService, InMemoryCacheService>();
+builder.Services.AddSingleton<IPaymentsApi>(sp =>
+{
+    var accessToken = builder.Configuration["Square:AccessToken"];
+    var squareClient = new SquareClient.Builder()
+    .AccessToken(accessToken)
+    .Environment(builder.Environment.IsProduction() ? Square.Environment.Production : Square.Environment.Sandbox)
+    .Build();
+    
+    return squareClient.PaymentsApi;
+});
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 12000000; //12MB
