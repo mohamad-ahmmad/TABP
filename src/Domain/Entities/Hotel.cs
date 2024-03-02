@@ -21,4 +21,5 @@ public class Hotel : BaseSoftDeletableAuditableEntity
     public Owner? Owner { get; set; } = null!;
     public List<Amenity> Amenities { get; set; } = new List<Amenity>();
     public List<RoomInfo> RoomInfos { get; set; } = new List<RoomInfo>();
+    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }

@@ -9,4 +9,5 @@ public class Room : BaseSoftDeletableAuditableEntity
     public int PricePerDay { get; set; }
     public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
     public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }

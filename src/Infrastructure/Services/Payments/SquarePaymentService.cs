@@ -18,7 +18,7 @@ public class SquarePaymentService
         double amount,
         string currency)
     {
-        long amountLong = (long)(amount * 10);
+        long amountLong = (long)(amount * 100);
         var createPaymentReq = new CreatePaymentRequest.Builder
             (
                 cardDetailsToken,
@@ -43,7 +43,7 @@ public class SquarePaymentService
             {
                 return Result<Empty>.Failures(errors);
             }
-
+            
             return Result<Empty>.Success(Empty.Value)!;
         }
         catch (ApiException e)

@@ -1,8 +1,6 @@
-﻿using Domain.Common;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace Infrastructure.Persistence;
 
@@ -20,6 +18,7 @@ public class TABPDbContext : DbContext
     public DbSet<Amenity> Amenities { get; set; }
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
     public TABPDbContext(DbContextOptions<TABPDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder mb)
@@ -29,8 +28,8 @@ public class TABPDbContext : DbContext
             .HasOne(h => h.City)
             .WithMany()
             .OnDelete(DeleteBehavior.SetNull);
-            
-        
+
+
         mb.Entity<Hotel>()
            .HasOne(h => h.HotelType)
            .WithMany(ht => ht.Hotels)
@@ -80,10 +79,34 @@ public class TABPDbContext : DbContext
             .IsRequired(true)
             .OnDelete(DeleteBehavior.Cascade);
 
+        mb.Entity<User>()
+            .HasMany(u => u.Bookings)
+            .WithOne(b => b.User)
+            .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        mb.Entity<Hotel>()
+            .HasMany(h => h.Bookings)
+            .WithOne(b => b.Hotel)
+            .HasForeignKey(b => b.HotelId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        mb.Entity<Room>()
+            .HasMany(r => r.Bookings)
+            .WithOne(b => b.Room)
+            .HasForeignKey(b => b.RoomId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        mb.Entity<City>()
+            .HasMany(c => c.Bookings)
+            .WithOne(b => b.City)
+            .HasForeignKey(b => b.CityId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         SeedingUsers(mb);
         SeedingCities(mb);
     }
-    
+
     private void SeedingCities(ModelBuilder mb)
     {
         mb.Entity<City>().HasData
@@ -95,7 +118,7 @@ public class TABPDbContext : DbContext
                     CountryName = "Tokyo",
                     Longitude = 33.1245,
                     Latitude = 1.12314,
-                    PostOfficePostalCode="Z32Z",
+                    PostOfficePostalCode = "Z32Z",
                     ThumbnailUrl = "1.jpg"
                 },
                 new City
@@ -127,7 +150,7 @@ public class TABPDbContext : DbContext
                 },
                 new User
                 {
-                    Id =  new Guid("c3fea012-2148-41b4-9b76-b6a30293bf5d"),
+                    Id = new Guid("c3fea012-2148-41b4-9b76-b6a30293bf5d"),
                     Username = "ml7m",
                     Firstname = "Melheem",
                     Lastname = "Met'b",
