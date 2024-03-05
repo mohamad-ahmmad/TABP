@@ -21,6 +21,7 @@ using Infrastructure.Persistence.Repositories.RoomTypes;
 using Infrastructure.Persistence.Repositories.Users;
 using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Security;
+using Infrastructure.Services.Email;
 using Infrastructure.Services.ImagesUploaders;
 using Infrastructure.Services.TimeProviders;
 using Infrastructure.Services.Uploaders;
@@ -70,6 +71,7 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipeli
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(QueryCachingPipelineBehavior<,>));
 builder.Services.AddScoped<IHasher, Sha256Hasher>();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection(nameof(EmailConfig)));
 builder.Services.AddSingleton<IImageExtensionValidator, ImageExtensionValidator>();
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddMemoryCache();
