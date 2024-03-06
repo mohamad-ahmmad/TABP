@@ -30,4 +30,22 @@ public class RoomsRepository : IRoomsRepository
         room.IsDeleted = true;
         return Result<object?>.Success(HttpStatusCode.NoContent);
     }
+
+    public async Task<IEnumerable<Room>> GetInvalidRoomsByBookingDateTimeIntervalAsync(IEnumerable<CartItem> cartItems,
+        CancellationToken cancellationToken)
+    {
+        var invalidRooms = await _dbContext.Bookings
+            .Where(
+                b => cartItems.Any(
+                    ci => 
+                    ci.RoomId == b.RoomId &&
+                    b.FromDate <= ci.FromDate &&
+                    b.ToDate >= ci.ToDate
+                    )
+            )
+            .Select(b => b.Room)
+            .ToListAsync(cancellationToken);
+
+        return invalidRooms!;
+    }
 }
