@@ -8,5 +8,6 @@ public static class UserErrors
     public static Error EmailAlreadyUsed = new("User.Email", "The email is already taken.");
     public static Error UnAuthorized = new("User.UserLevel", "UnAuthorized");
     public static Error InvalidCredentials = new("Credentials", "Invalid username or password.");
+    public static Error NotFoundUser = new("User", "User not found");
 }
 

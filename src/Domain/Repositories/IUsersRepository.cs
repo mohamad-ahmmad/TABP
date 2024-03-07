@@ -8,5 +8,6 @@ namespace Domain.Repositories
         Task<bool> IsUsernameExistByAsync(string username, CancellationToken cancellationToken);
         Task<bool> IsEmailExistByAsync(string email, CancellationToken cancellationToken);
         Task<User?> GetUserByCredentials(string username, string password, CancellationToken cancellationToken);
+        Task<string?> GetUserEmailByUserIdAsync(Guid userId, CancellationToken cancellationToken);
     }
 }

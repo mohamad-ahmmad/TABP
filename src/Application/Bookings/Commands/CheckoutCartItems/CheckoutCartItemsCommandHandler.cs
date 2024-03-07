@@ -20,6 +20,7 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
     private readonly IRoomsRepository _roomsRepo;
     private readonly IBookingsRepository _bookingsRepo;
     private readonly IMapper _mapper;
+    private readonly IUsersRepository _userRepo;
 
     public CheckoutCartItemsCommandHandler(IPaymentService paymentService,
         IEmailService emailService,
@@ -28,6 +29,7 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
         ICartItemsRepository cartItemsRepo,
         IRoomsRepository roomsRepository,
         IBookingsRepository bookingsRepository,
+        IUsersRepository usersRepository,
         IMapper mapper
         )
     {
@@ -39,6 +41,7 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
         _roomsRepo = roomsRepository;
         _bookingsRepo = bookingsRepository;
         _mapper = mapper;
+        _userRepo = usersRepository;
     }
     public async Task<Result<Empty>> Handle(CheckoutCartItemsCommand request, CancellationToken cancellationToken)
     {
@@ -48,12 +51,19 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
         }
         
         var cartItems = await _cartItemsRepo.GetCartItemsByUserIdAsync(request.UserId, cancellationToken);
+
+        var userEmail = await _userRepo.GetUserEmailByUserIdAsync(request.UserId, cancellationToken);
+
+        if(userEmail  == null)
+        {
+            return Result<Empty>.Failure(UserErrors.NotFoundUser, HttpStatusCode.NotFound);
+        }
         
         if(!cartItems.Any())
         {
             return Result<Empty>.Failure(CartItemErrors.NotFoundCartItem, HttpStatusCode.NotFound);
         }
-
+        
         try
         {
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
@@ -63,13 +73,13 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
             if (invalidRooms.Any())
             {
                 await _unitOfWork.RollBackTransactionAsync(cancellationToken);
-
+                
                 return Result<Empty>.Failures(invalidRooms
                     .Select(room => RoomErrors.RoomWithIdIsAlreadyBookedError(room.Id))
                     .ToList(),
                     HttpStatusCode.BadRequest);
             }
-
+            
             var cartItemsDto = _mapper.Map<IEnumerable<CartItemDto>>(cartItems);
 
             var bookings = await AddBookingsFromCartItemsDtoAsync(cartItemsDto, cancellationToken);
@@ -78,7 +88,8 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
 
             var emailMessage = GenerateEmailMessage(bookings);
 
-            //Email service here then test but first get user email.
+            await _emailService.SendEmailAsync(userEmail, $"Invoice", emailMessage);
+            
 
             var result = await _paymentService.PayAsync(request.CardDetailsToken,
                 request.IdempotencyKey,

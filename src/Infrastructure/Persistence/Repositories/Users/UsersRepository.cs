@@ -12,7 +12,7 @@ public class UsersRepository : IUsersRepository
     {
         _dbContext = dbContext;
     }
-
+    
     public async Task<User> AddUserAsync(User user, CancellationToken cancellationToken)
     {
         await _dbContext.AddAsync(user, cancellationToken);
@@ -31,6 +31,16 @@ public class UsersRepository : IUsersRepository
     {
         return await _dbContext.Users
             .Where(u => u.Username == username &&  u.Password == password)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<string?> GetUserEmailByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await
+            _dbContext
+            .Users
+            .Where(u => u.Id == userId)
+            .Select(u => u.Email)
             .FirstOrDefaultAsync(cancellationToken);
     }
 }
