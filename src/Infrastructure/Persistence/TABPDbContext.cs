@@ -85,11 +85,6 @@ public class TABPDbContext : DbContext
             .HasForeignKey(b => b.UserId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        mb.Entity<Hotel>()
-            .HasMany(h => h.Bookings)
-            .WithOne(b => b.Hotel)
-            .HasForeignKey(b => b.HotelId)
-            .OnDelete(DeleteBehavior.SetNull);
 
         mb.Entity<Room>()
             .HasMany(r => r.Bookings)
@@ -97,11 +92,6 @@ public class TABPDbContext : DbContext
             .HasForeignKey(b => b.RoomId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        mb.Entity<City>()
-            .HasMany(c => c.Bookings)
-            .WithOne(b => b.City)
-            .HasForeignKey(b => b.CityId)
-            .OnDelete(DeleteBehavior.SetNull);
 
         SeedingUsers(mb);
         SeedingCities(mb);
