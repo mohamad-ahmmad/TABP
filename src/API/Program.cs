@@ -23,6 +23,7 @@ using Infrastructure.Persistence.UnitOfWork;
 using Infrastructure.Security;
 using Infrastructure.Services.Email;
 using Infrastructure.Services.ImagesUploaders;
+using Infrastructure.Services.Payments;
 using Infrastructure.Services.TimeProviders;
 using Infrastructure.Services.Uploaders;
 using MediatR;
@@ -146,6 +147,8 @@ builder.Services.AddScoped<IRoomsRepository, RoomsRepository>();
 builder.Services.AddScoped<IAmenitiesRepository, AmenitiesRepository>();
 builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
 builder.Services.AddScoped<ICartItemsRepository, CartItemsRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IPaymentService, SquarePaymentService>();
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings

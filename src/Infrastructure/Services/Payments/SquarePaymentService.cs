@@ -1,10 +1,11 @@
-﻿using Domain.Shared;
+﻿using Application.Abstractions;
+using Domain.Shared;
 using Square.Apis;
 using Square.Exceptions;
 using Square.Models;
 
 namespace Infrastructure.Services.Payments;
-public class SquarePaymentService
+public class SquarePaymentService : IPaymentService
 {
     private readonly IPaymentsApi _paymentsApi;
 

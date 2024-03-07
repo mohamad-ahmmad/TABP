@@ -43,7 +43,7 @@ public class OwnersController : Controller
     {
         var createOwnerCommand = new CreateOwnerCommand(ownerForCreateDto);
         var result = await _sender.Send(createOwnerCommand);
-
+        
         if(result.IsFailure) 
         {
             return StatusCode((int)result.StatusCode, new ErrorsList()
