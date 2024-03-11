@@ -34,18 +34,19 @@ public class RoomsRepository : IRoomsRepository
     public async Task<IEnumerable<Room>> GetInvalidRoomsByBookingDateTimeIntervalAsync(IEnumerable<CartItem> cartItems,
         CancellationToken cancellationToken)
     {
-        var invalidRooms = await _dbContext.Bookings
-            .Where(
-                b => cartItems.Any(
-                    ci => 
-                    ci.RoomId == b.RoomId &&
-                    b.FromDate <= ci.FromDate &&
-                    b.ToDate >= ci.ToDate
-                    )
-            )
+
+        IQueryable<Booking> invalidRooms = _dbContext.Bookings;
+        foreach (var ci in cartItems)
+        {
+            invalidRooms = invalidRooms.Where(b => ci.RoomId == b.RoomId
+                            && b.FromDate <= ci.FromDate
+                            && b.ToDate >= ci.ToDate);
+        }
+
+        var queryResult = await invalidRooms
             .Select(b => b.Room)
             .ToListAsync(cancellationToken);
 
-        return invalidRooms!;
+        return queryResult!;
     }
 }

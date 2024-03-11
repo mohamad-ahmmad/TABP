@@ -28,6 +28,15 @@
             <response code="400">List of errors.</response>
             <returns>Token</returns>
         </member>
+        <member name="M:API.Controllers.BookingsController.CreateBookingsFromCartItems(System.Guid,API.Models.CreateBookingRequest,System.Threading.CancellationToken)">
+            <summary>
+            Create bookings by checkout cart items.
+            </summary>
+            <param name="userId"></param>
+            <param name="createBookingRequest"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.CartItemsController.AddCartItem(System.Guid,API.Models.CartItemRequest,System.Threading.CancellationToken)">
             <summary>
             Add item to the user's cart.

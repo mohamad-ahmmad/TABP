@@ -9,6 +9,7 @@ using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Repositories.Amenities;
+using Infrastructure.Persistence.Repositories.Bookings;
 using Infrastructure.Persistence.Repositories.CartItems;
 using Infrastructure.Persistence.Repositories.Cities;
 using Infrastructure.Persistence.Repositories.Discounts;
@@ -81,7 +82,10 @@ builder.Services.AddSingleton<IPaymentsApi>(sp =>
 {
     var accessToken = builder.Configuration["Square:AccessToken"];
     var squareClient = new SquareClient.Builder()
-    .AccessToken(accessToken)
+    .BearerAuthCredentials(
+        new Square.Authentication.BearerAuthModel.Builder(accessToken)
+        .Build()
+    )
     .Environment(builder.Environment.IsProduction() ? Square.Environment.Production : Square.Environment.Sandbox)
     .Build();
     
@@ -149,6 +153,7 @@ builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
 builder.Services.AddScoped<ICartItemsRepository, CartItemsRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPaymentService, SquarePaymentService>();
+builder.Services.AddScoped<IBookingsRepository, BookingsRepository>();
 builder.Services.AddSingleton((s) =>
 {
     return new JsonSerializerSettings

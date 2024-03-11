@@ -37,10 +37,10 @@ public class SquarePaymentService : IPaymentService
         try
         {
             CreatePaymentResponse result = await _paymentsApi.CreatePaymentAsync(createPaymentReq);
-            var errors = result.Errors
+            var errors = result.Errors?
                 .Select(e => new Domain.Shared.Error(e.Category, e.Detail))
                 .ToList();
-            if (errors.Count != 0)
+            if (errors != null && errors.Count != 0)
             {
                 return Result<Empty>.Failures(errors);
             }

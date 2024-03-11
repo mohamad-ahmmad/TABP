@@ -8,6 +8,7 @@ using Domain.Repositories;
 using Domain.Shared;
 using System.Data;
 using System.Net;
+using System.Net.Mail;
 
 namespace Application.Bookings.Commands.CheckoutCartItems;
 public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItemsCommand, Empty>
@@ -21,6 +22,7 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
     private readonly IBookingsRepository _bookingsRepo;
     private readonly IMapper _mapper;
     private readonly IUsersRepository _userRepo;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     public CheckoutCartItemsCommandHandler(IPaymentService paymentService,
         IEmailService emailService,
@@ -30,7 +32,8 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
         IRoomsRepository roomsRepository,
         IBookingsRepository bookingsRepository,
         IUsersRepository usersRepository,
-        IMapper mapper
+        IMapper mapper,
+        IDateTimeProvider dateTimeProvider
         )
     {
         _paymentService = paymentService;
@@ -42,10 +45,11 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
         _bookingsRepo = bookingsRepository;
         _mapper = mapper;
         _userRepo = usersRepository;
+        _dateTimeProvider = dateTimeProvider;
     }
     public async Task<Result<Empty>> Handle(CheckoutCartItemsCommand request, CancellationToken cancellationToken)
     {
-        if(request.UserId == _userContext.GetUserId())
+        if(request.UserId != _userContext.GetUserId())
         {
             return Result<Empty>.Failure(BookingErrors.ForbidToCheckoutCartItems, HttpStatusCode.Forbidden);
         }
@@ -53,8 +57,9 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
         var cartItems = await _cartItemsRepo.GetCartItemsByUserIdAsync(request.UserId, cancellationToken);
 
         var userEmail = await _userRepo.GetUserEmailByUserIdAsync(request.UserId, cancellationToken);
+        string emailMessage;
 
-        if(userEmail  == null)
+        if (userEmail  == null)
         {
             return Result<Empty>.Failure(UserErrors.NotFoundUser, HttpStatusCode.NotFound);
         }
@@ -86,11 +91,10 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
 
             var amoutMoney = GetAmoutMoney(cartItemsDto);
 
-            var emailMessage = GenerateEmailMessage(bookings);
+            emailMessage = GenerateEmailMessage(bookings);
 
-            await _emailService.SendEmailAsync(userEmail, $"Invoice", emailMessage);
             
-
+            
             var result = await _paymentService.PayAsync(request.CardDetailsToken,
                 request.IdempotencyKey,
                 amoutMoney,
@@ -107,7 +111,6 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
 
             await _unitOfWork.CommitTransationAsync(cancellationToken);
 
-            return Result<Empty>.Success(Empty.Value)!;
         }
         catch
         {
@@ -115,7 +118,8 @@ public class CheckoutCartItemsCommandHandler : ICommandHandler<CheckoutCartItems
             throw;
         }
 
-
+        await _emailService.SendEmailAsync(userEmail, $"-Invoice Report {_dateTimeProvider.GetUtcNow()} TABP-", emailMessage);
+        return Result<Empty>.Success(Empty.Value)!;
     }
 
     private static string GenerateEmailMessage(IEnumerable<Booking> bookings)
