@@ -6,6 +6,7 @@ using AutoMapper;
 using Domain.Errors;
 using Domain.Repositories;
 using Domain.Shared;
+using System.Net;
 
 namespace Application.Bookings.Queries.GetBookingsByUserId;
 public class GetBookingsByUserIdQueryHandler : IQueryHandler<GetBookingsByUserIdQuery, PagedList<BookingDto>>
@@ -26,14 +27,20 @@ public class GetBookingsByUserIdQueryHandler : IQueryHandler<GetBookingsByUserId
     }
     public async Task<Result<PagedList<BookingDto>>> Handle(GetBookingsByUserIdQuery request, CancellationToken cancellationToken)
     {
-        if(_userContext.GetUserId() != request.UserId)
+        if (_userContext.GetUserId() != request.UserId)
         {
-            return Result<PagedList<BookingDto>>.Failure(BookingErrors.ForbidToGetBookings, System.Net.HttpStatusCode.Forbidden);
+            return Result<PagedList<BookingDto>>.Failure(BookingErrors.ForbidToGetBookings, HttpStatusCode.Forbidden);
         }
-        _bookingsRepo.GetBookingsAsync(request.Page,
+        var bookingsAndTotalCount = await _bookingsRepo.GetBookingsAsync(request.Page,
             request.PageSize,
             request.SortCol,
             request.SortOrder,
             cancellationToken);
+
+        var(bookings, count) = bookingsAndTotalCount;
+
+        var bookingsDto = _mapper.Map<IEnumerable<BookingDto>>(bookings);
+        var pagedList = new PagedList<BookingDto>(bookingsDto, request.Page, request.PageSize, count);
+        return Result<PagedList<BookingDto>>.Success(pagedList)!;
     }
 }
